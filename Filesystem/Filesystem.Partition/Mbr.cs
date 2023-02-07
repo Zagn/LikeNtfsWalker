@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Util.IO;
 
-namespace Partition
+namespace Filesystem.Partition
 {
     public class Mbr
     {
