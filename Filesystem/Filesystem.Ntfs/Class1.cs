@@ -8,5 +8,6 @@ namespace Filesystem.Ntfs
 {
     public class Class1
     {
+
     }
 }
