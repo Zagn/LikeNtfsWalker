@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="LikeNtfsWalker.View.RecordView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
+        mc:Ignorable="d"
+        Height="360" Width="760" d:DataContext="{d:DesignInstance Type=local:RecordViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Column="1" Grid.Row="1" Content="Save" Grid.ColumnSpan="2"/>
+        <TabControl Grid.Column="1" Grid.Row="3">
+            <TabItem Header="MFT Records">
+                <Grid Background="#FFE5E5E5">
+                    <ListView d:ItemsSource="{d:SampleData ItemCount=5}" >
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="MFT #"/>
+                                <GridViewColumn Header="File name"/>
+                                <GridViewColumn Header="Size"/>
+                                <GridViewColumn Header="Date created"/>
+                                <GridViewColumn Header="Date modified"/>
+                                <GridViewColumn Header="Attributes"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13*"/>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="387*"/>
+                    </Grid.ColumnDefinitions>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <TabControl  Grid.Column="2" Grid.Row="3">
+            <TabItem Header="File imformation">
+                <Grid Background="#FFE5E5E5">
+                    <ListView d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Property"/>
+                                <GridViewColumn Header="Description"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Preview">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="HexData">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

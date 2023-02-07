@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="LikeNtfsWalker.View.SelectDiskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
+        mc:Ignorable="d"
+        Height="360" Width="760" d:DataContext="{d:DesignInstance Type=local:SelectDiskViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <TabControl VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1">
+            <TabItem Header="Select disk to scan">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button Width="100" Height="30" Command="{Binding SelectPhysicalCommand}" Content="Physical"/>
+
+                    <Button Width="100" Height="30" Command="{Binding SelectLogicalCommand}" Content="Logical" Margin="0, 100, 0,0"/>
+
+                    <ListView Margin="0,0,0,36" ItemsSource="{Binding DiskList}" Grid.Column="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image></Image>
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                    <TextBlock Text="{Binding Size}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button Content="Refresh list" HorizontalAlignment="Center" Margin="0,280,0,0" VerticalAlignment="Top" Height="31" Width="734" Command="{Binding RefreshCommand}" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Advanced">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock HorizontalAlignment="Left" Height="22" Margin="50,75,0,0" TextWrapping="Wrap" Text="Select disk image file to scan : " VerticalAlignment="Top" Width="173"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="50,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="340"/>
+                    <Button Content="Browse..." HorizontalAlignment="Left" Height="22" Margin="407,98,0,0" VerticalAlignment="Top" Width="101"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
