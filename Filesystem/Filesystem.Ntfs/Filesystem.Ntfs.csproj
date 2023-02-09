@@ -41,8 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="MftAttribute.cs" />
+    <Compile Include="MftEntry.cs" />
+    <Compile Include="MFTEntryHeader.cs" />
+    <Compile Include="NTFSFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VBR.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Util.IO\Util.IO.csproj">
