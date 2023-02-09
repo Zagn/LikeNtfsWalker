@@ -46,11 +46,11 @@ namespace Filesystem.Ntfs
 
             //public int AttType;
             public int AttLength { get; }
-            public short NonResidentFlag { get; }
-            public short NameLength { get; }
-            public short OffsettotheName { get; }
-            public short Flag { get; }
-            public short AttID { get; }
+            public ushort NonResidentFlag { get; }
+            public ushort NameLength { get; }
+            public ushort OffsettotheName { get; }
+            public ushort Flag { get; }
+            public ushort AttID { get; }
 
             public MftAttHeader(Stream stream)
             {
@@ -59,31 +59,31 @@ namespace Filesystem.Ntfs
                 //if (Enum.IsDefined(typeof(AttType), value))
                 //    t = (AttType)value;
 
-                //분석
-                byte[] buffer = new byte[16];
-                stream.Read(buffer, 0, 4);
-                Type = (AttType)buffer[4];
+                Type = AttType.Unknown;
+                var value = 0x10;
+                if (Enum.IsDefined(typeof(AttType), value))
+                Type = (AttType)value;
 
                 AttLength = stream.ReadInt32();
-                NonResidentFlag = stream.ReadInt16();
-                NameLength = stream.ReadInt16();
-                OffsettotheName = stream.ReadInt16();
-                Flag = stream.ReadInt16();
-                AttID = stream.ReadInt16();
+                NonResidentFlag = stream.ReadUInt16();
+                NameLength = stream.ReadUInt16();
+                OffsettotheName = stream.ReadUInt16();
+                Flag = stream.ReadUInt16();
+                AttID = stream.ReadUInt16();
             }
         }
 
         internal class ResidentHeader : MftAttHeader
         {
             public int SizeOfContent { get; }
-            public short OffsetOfCount { get; }
+            public ushort OffsetOfCount { get; }
             public bool IsIndex { get; }
             public byte Padding { get; }
 
             public ResidentHeader(Stream stream) : base(stream)
             {
                 SizeOfContent = stream.ReadInt32();
-                OffsetOfCount = stream.ReadInt16();
+                OffsetOfCount = stream.ReadUInt16();
                 //IsIndex = buffer[0] == 1;
                 IsIndex = stream.ReadBool();
                 Padding = (byte)stream.ReadByte(); 
@@ -94,13 +94,13 @@ namespace Filesystem.Ntfs
         {
             public long StartVcn { get; }
             public long EndVcn { get; }
-            public short RunlistOffset { get; }
-            public short CompressUnitSize { get; }
+            public ushort RunlistOffset { get; }
+            public ushort CompressUnitSize { get; }
             public int Padding { get; }
             public long ContentAllocSize { get; }
             public long ContentActureSize { get; }
             public long ContentInitSize { get; }
-            public List<ClusterRun> ClusterRuns { get; } //
+            public List<ClusterRun> ClusterRuns { get; } 
 
             public NonResidentHeader(Stream stream) : base(stream)
             {
@@ -109,9 +109,10 @@ namespace Filesystem.Ntfs
 
                 EndVcn = stream.ReadInt64();
 
-                RunlistOffset = stream.ReadInt16();
+                RunlistOffset = stream.ReadUInt16();
 
-                CompressUnitSize = stream.ReadInt16();
+                CompressUnitSize = stream.ReadUInt16();
+
                 Padding = stream.ReadInt32();
 
                 ContentAllocSize = stream.ReadInt64();
@@ -167,9 +168,8 @@ namespace Filesystem.Ntfs
             public long UpdateSequenceNumber { get; }
 
             public StandardInformation(MftAttHeader header, Stream stream) : base(header)
-            {
-                //byte[] buffer = new byte[header.AttLength]; //
-                stream.Seek(24, SeekOrigin.Begin);
+            {                
+                stream.Seek(24 , SeekOrigin.Begin);
 
                 CreationTime = stream.ReadInt64();
                 ModifiedTime = stream.ReadInt64();
@@ -197,8 +197,8 @@ namespace Filesystem.Ntfs
             public long RealSizeOfFile { get; }
             public int Flags { get; }
             public int ReparseValue { get; }
-            public short LengthOfName { get; }
-            public short Namespace { get; }
+            public ushort LengthOfName { get; }
+            public ushort Namespace { get; }
             public string Name { get; }
             public FileName(MftAttHeader header, Stream stream) : base(header)
             {
@@ -222,9 +222,9 @@ namespace Filesystem.Ntfs
 
                 ReparseValue = stream.ReadInt32();
 
-                LengthOfName = stream.ReadInt16();
+                LengthOfName = stream.ReadUInt16();
 
-                Namespace = stream.ReadInt16();
+                Namespace = stream.ReadUInt16();
 
                 Name = stream.ReadString(LengthOfName);
             }

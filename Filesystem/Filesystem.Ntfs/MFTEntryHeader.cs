@@ -11,18 +11,18 @@ namespace Filesystem.Ntfs
     public class MFTEntryHeader
     {
         public string Signature;
-        public short OffsetOfFixupArray;
-        public short CountOfFixupValues;
+        public ushort OffsetOfFixupArray;
+        public ushort CountOfFixupValues;
         public long LogFileSequenceNumber;
-        public short SequenceNumber;
-        public short LinkCount;
-        public short OffsetToFirstAttribute;
-        public short Flags;
+        public ushort SequenceNumber;
+        public ushort LinkCount;
+        public ushort OffsetToFirstAttribute;
+        public ushort Flags;
         public int UsedSizeofMFTEntry;
         public int AllocatedSizeOfMFTEntry;
         public long FileReferenceToBaseMFTEntry;
-        public short NextAttributeID;
-        public short AlignTo4BBoundary;
+        public ushort NextAttributeID;
+        public ushort AlignTo4BBoundary;
         public int NumberOfThisMFTEntry;
 
         public MFTEntryHeader(Stream stream)
@@ -32,18 +32,18 @@ namespace Filesystem.Ntfs
             //Signature = ByteConverter_string.ToString(buffer);       
 
             Signature = stream.ReadString(8);
-            OffsetOfFixupArray = stream.ReadInt16();
-            CountOfFixupValues = stream.ReadInt16();
+            OffsetOfFixupArray = stream.ReadUInt16();
+            CountOfFixupValues = stream.ReadUInt16();
             LogFileSequenceNumber = stream.ReadInt64();
-            SequenceNumber = stream.ReadInt16();
-            LinkCount = stream.ReadInt16();
-            OffsetToFirstAttribute = stream.ReadInt16();
-            Flags = stream.ReadInt16();
+            SequenceNumber = stream.ReadUInt16();
+            LinkCount = stream.ReadUInt16();
+            OffsetToFirstAttribute = stream.ReadUInt16();
+            Flags = stream.ReadUInt16();
             UsedSizeofMFTEntry = stream.ReadInt32();
             AllocatedSizeOfMFTEntry = stream.ReadInt32();
             FileReferenceToBaseMFTEntry = stream.ReadInt64();
-            NextAttributeID = stream.ReadInt16();
-            AlignTo4BBoundary = stream.ReadInt16();
+            NextAttributeID = stream.ReadUInt16();
+            AlignTo4BBoundary = stream.ReadUInt16();
             NumberOfThisMFTEntry = stream.ReadInt32();
         }
     }

@@ -13,6 +13,13 @@ namespace Util.IO
 
             return BitConverter.ToInt16(buffer, 0);
         }
+        public static ushort ReadUInt16(this Stream stream, int size = 2)
+        {
+            byte[] buffer = new byte[sizeof(ushort)];
+            stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+
+            return BitConverter.ToUInt16(buffer, 0);
+        }
 
         public static int ReadInt32(this Stream stream, int size = 4)
         {

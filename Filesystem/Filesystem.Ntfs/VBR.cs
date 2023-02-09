@@ -12,15 +12,15 @@ namespace Filesystem.Ntfs
     {
         public int JmpCommand;
         public string OemID;
-        public short BytesPerSector;
-        public short SectorsPerCluster;
-        public short Reserved;
-        public short Always0_0;
+        public ushort BytesPerSector;
+        public ushort SectorsPerCluster;
+        public ushort Reserved;
+        public ushort Always0_0;
         //public int Unused0; 의미x 분석x
-        public short MediaDescriptor;
-        public short Always0_1;
-        public short SectorPerTrack;
-        public short NumberofHeads;
+        public ushort MediaDescriptor;
+        public ushort Always0_1;
+        public ushort SectorPerTrack;
+        public ushort NumberofHeads;
         public int HiddenSectors;
         //public int Unused1; 
         //public int Unused2; 
@@ -46,15 +46,15 @@ namespace Filesystem.Ntfs
 
             JmpCommand = stream.ReadInt32();
             OemID = stream.ReadString(8);
-            BytesPerSector = stream.ReadInt16();
-            SectorsPerCluster = stream.ReadInt16();
-            Reserved = stream.ReadInt16();
-            Always0_0 = stream.ReadInt16();
+            BytesPerSector = stream.ReadUInt16();
+            SectorsPerCluster = stream.ReadUInt16();
+            Reserved = stream.ReadUInt16();
+            Always0_0 = stream.ReadUInt16();
             stream.Seek(2, SeekOrigin.Current); //Unused0
-            MediaDescriptor = stream.ReadInt16();
-            Always0_1 = stream.ReadInt16();
-            SectorPerTrack = stream.ReadInt16();
-            NumberofHeads = stream.ReadInt16();
+            MediaDescriptor = stream.ReadUInt16();
+            Always0_1 = stream.ReadUInt16();
+            SectorPerTrack = stream.ReadUInt16();
+            NumberofHeads = stream.ReadUInt16();
             HiddenSectors = stream.ReadInt32();
             stream.Seek(8, SeekOrigin.Current); //Unused1, Unused2
             TotalSectors = stream.ReadInt64();
