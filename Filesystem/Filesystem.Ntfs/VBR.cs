@@ -32,17 +32,19 @@ namespace Filesystem.Ntfs
         public ulong VolumeSerialNumber;
         public uint Checksum;
         //public int BootCodeAndErrorMessage; //분석x
-        public uint Signature;
+        public ushort Signature;
         public byte[] Data;
 
         public uint ClusterSize => (uint)BytesPerSector * SectorsPerCluster;
-        public ulong MftStartOffset => ClusterSize * LogicalClusterNumberForTheFileMFT;
+        public ulong MftStartOffset;
 
+  
         public VBR(Stream stream)
         {
             //byte[] buffer = new byte[512]
             //stream.Read(buffer, 0, 3);
             //JmpCommand = ByteConverter_2.ToInt16(buffer); //<- 4바이트를 읽어서 16,32,64 / 3바이트만 읽을 수 있게 바꿔보기 /stream.ReadInt32(3)
+            MftStartOffset = ClusterSize * LogicalClusterNumberForTheFileMFT + (ulong)stream.Position;
 
             JmpCommand = stream.ReadUInt32(3);
             OemID = stream.ReadString(8);
@@ -65,9 +67,7 @@ namespace Filesystem.Ntfs
             VolumeSerialNumber = stream.ReadUInt64();
             Checksum = stream.ReadUInt32();
             stream.Seek(426, SeekOrigin.Current);
-            Signature = stream.ReadUInt32();
+            Signature = stream.ReadUInt16();
         }
-
-
     }
 }
