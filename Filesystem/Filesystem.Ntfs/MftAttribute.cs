@@ -45,7 +45,7 @@ namespace Filesystem.Ntfs
             public AttType Type { get; }
 
             //public int AttType;
-            public int AttLength { get; }
+            public uint AttLength { get; }
             public ushort NonResidentFlag { get; }
             public ushort NameLength { get; }
             public ushort OffsettotheName { get; }
@@ -64,9 +64,9 @@ namespace Filesystem.Ntfs
                 if (Enum.IsDefined(typeof(AttType), value))
                 Type = (AttType)value;
 
-                AttLength = stream.ReadInt32();
-                NonResidentFlag = stream.ReadUInt16();
-                NameLength = stream.ReadUInt16();
+                AttLength = stream.ReadUInt32();
+                NonResidentFlag = stream.ReadUInt16(1);
+                NameLength = stream.ReadUInt16(1);
                 OffsettotheName = stream.ReadUInt16();
                 Flag = stream.ReadUInt16();
                 AttID = stream.ReadUInt16();
@@ -75,14 +75,14 @@ namespace Filesystem.Ntfs
 
         internal class ResidentHeader : MftAttHeader
         {
-            public int SizeOfContent { get; }
+            public uint SizeOfContent { get; }
             public ushort OffsetOfCount { get; }
             public bool IsIndex { get; }
             public byte Padding { get; }
 
             public ResidentHeader(Stream stream) : base(stream)
             {
-                SizeOfContent = stream.ReadInt32();
+                SizeOfContent = stream.ReadUInt32();
                 OffsetOfCount = stream.ReadUInt16();
                 //IsIndex = buffer[0] == 1;
                 IsIndex = stream.ReadBool();
@@ -92,34 +92,34 @@ namespace Filesystem.Ntfs
 
         internal class NonResidentHeader : MftAttHeader
         {
-            public long StartVcn { get; }
-            public long EndVcn { get; }
+            public ulong StartVcn { get; }
+            public ulong EndVcn { get; }
             public ushort RunlistOffset { get; }
             public ushort CompressUnitSize { get; }
-            public int Padding { get; }
-            public long ContentAllocSize { get; }
-            public long ContentActureSize { get; }
-            public long ContentInitSize { get; }
+            public uint Padding { get; }
+            public ulong ContentAllocSize { get; }
+            public ulong ContentActureSize { get; }
+            public ulong ContentInitSize { get; }
             public List<ClusterRun> ClusterRuns { get; } 
 
             public NonResidentHeader(Stream stream) : base(stream)
             {
                 
-                StartVcn = stream.ReadInt64();
+                StartVcn = stream.ReadUInt64();
 
-                EndVcn = stream.ReadInt64();
+                EndVcn = stream.ReadUInt64();
 
                 RunlistOffset = stream.ReadUInt16();
 
                 CompressUnitSize = stream.ReadUInt16();
 
-                Padding = stream.ReadInt32();
+                Padding = stream.ReadUInt32();
 
-                ContentAllocSize = stream.ReadInt64();
+                ContentAllocSize = stream.ReadUInt64();
 
-                ContentActureSize = stream.ReadInt64();
+                ContentActureSize = stream.ReadUInt64();
 
-                ContentInitSize = stream.ReadInt64();
+                ContentInitSize = stream.ReadUInt64();
 
                 ClusterRuns.Add(new ClusterRun(stream));
             }
@@ -154,49 +154,49 @@ namespace Filesystem.Ntfs
         }
         internal class StandardInformation : MftAttribute
         {
-            public long CreationTime { get; }
-            public long ModifiedTime { get; }
-            public long MFTModifiedTime { get; }
-            public long LastAccessedTime { get; }
-            public int Flags { get; }
-            public int MaximumNumberOfVersions { get; }
-            public int VersionNumber { get; }
-            public int ClassID { get; }
-            public int OwnerID { get; }
-            public int SecurityID { get; }
-            public long QuotaCharged { get; }
-            public long UpdateSequenceNumber { get; }
+            public ulong CreationTime { get; }
+            public ulong ModifiedTime { get; }
+            public ulong MFTModifiedTime { get; }
+            public ulong LastAccessedTime { get; }
+            public uint Flags { get; }
+            public uint MaximumNumberOfVersions { get; }
+            public uint VersionNumber { get; }
+            public uint ClassID { get; }
+            public uint OwnerID { get; }
+            public uint SecurityID { get; }
+            public ulong QuotaCharged { get; }
+            public ulong UpdateSequenceNumber { get; }
 
             public StandardInformation(MftAttHeader header, Stream stream) : base(header)
             {                
                 stream.Seek(24 , SeekOrigin.Begin);
 
-                CreationTime = stream.ReadInt64();
-                ModifiedTime = stream.ReadInt64();
-                MFTModifiedTime = stream.ReadInt16();
-                LastAccessedTime = stream.ReadInt16();
-                Flags = stream.ReadInt32();
-                MaximumNumberOfVersions = stream.ReadInt32();
-                VersionNumber = stream.ReadInt32();
-                ClassID = stream.ReadInt32();
-                OwnerID = stream.ReadInt32();
-                SecurityID = stream.ReadInt32();
-                QuotaCharged = stream.ReadInt64();
-                UpdateSequenceNumber = stream.ReadInt64();
+                CreationTime = stream.ReadUInt64();
+                ModifiedTime = stream.ReadUInt64();
+                MFTModifiedTime = stream.ReadUInt16();
+                LastAccessedTime = stream.ReadUInt16();
+                Flags = stream.ReadUInt32();
+                MaximumNumberOfVersions = stream.ReadUInt32();
+                VersionNumber = stream.ReadUInt32();
+                ClassID = stream.ReadUInt32();
+                OwnerID = stream.ReadUInt32();
+                SecurityID = stream.ReadUInt32();
+                QuotaCharged = stream.ReadUInt64();
+                UpdateSequenceNumber = stream.ReadUInt64();
             }
         }
 
         internal class FileName : MftAttribute
         {
-            public long FileReferenceOfParentDirectory { get; }
-            public long CreationTime { get; }
-            public long ModifiedTime { get; }
-            public long MFTModifiedTime { get; }
-            public long LastAccessedTime { get; }
-            public long AllocatedSizeOfFile { get; }
-            public long RealSizeOfFile { get; }
-            public int Flags { get; }
-            public int ReparseValue { get; }
+            public ulong FileReferenceOfParentDirectory { get; }
+            public ulong CreationTime { get; }
+            public ulong ModifiedTime { get; }
+            public ulong MFTModifiedTime { get; }
+            public ulong LastAccessedTime { get; }
+            public ulong AllocatedSizeOfFile { get; }
+            public ulong RealSizeOfFile { get; }
+            public uint Flags { get; }
+            public uint ReparseValue { get; }
             public ushort LengthOfName { get; }
             public ushort Namespace { get; }
             public string Name { get; }
@@ -205,26 +205,26 @@ namespace Filesystem.Ntfs
                 //byte[] buffer = new byte[header.AttLength];
                 stream.Seek(24, SeekOrigin.Begin);
 
-                FileReferenceOfParentDirectory = stream.ReadInt64();
+                FileReferenceOfParentDirectory = stream.ReadUInt64();
 
-                CreationTime = stream.ReadInt64();
+                CreationTime = stream.ReadUInt64();
 
-                ModifiedTime = stream.ReadInt64();
+                ModifiedTime = stream.ReadUInt64();
 
-                MFTModifiedTime = stream.ReadInt64();
+                MFTModifiedTime = stream.ReadUInt64();
 
-                LastAccessedTime = stream.ReadInt64();
+                LastAccessedTime = stream.ReadUInt64();
 
-                AllocatedSizeOfFile = stream.ReadInt64();
+                AllocatedSizeOfFile = stream.ReadUInt64();
 
-                RealSizeOfFile = stream.ReadInt64();
-                Flags = stream.ReadInt32();
+                RealSizeOfFile = stream.ReadUInt64();
+                Flags = stream.ReadUInt32();
 
-                ReparseValue = stream.ReadInt32();
+                ReparseValue = stream.ReadUInt32();
 
-                LengthOfName = stream.ReadUInt16();
+                LengthOfName = stream.ReadUInt16(1);
 
-                Namespace = stream.ReadUInt16();
+                Namespace = stream.ReadUInt16(1);
 
                 Name = stream.ReadString(LengthOfName);
             }
