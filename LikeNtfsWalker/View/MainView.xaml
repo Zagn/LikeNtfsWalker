@@ -1,0 +1,40 @@
+﻿<Window x:Class="LikeNtfsWalker.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=local:MainViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <UserControl Content="{Binding CurrentView}" Grid.Column="1" Grid.Row="1"/>
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Back" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="1" Command="{Binding GotoPrevCommand}"/>
+            <Button Content="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="3" Command="{Binding GotoNextCommand}"/>
+            <Button Content="Exit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="5"  Command="{Binding ExitCommand}"/>
+        </Grid>
+    </Grid>
+</Window>

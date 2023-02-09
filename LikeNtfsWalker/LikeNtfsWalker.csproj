@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,20 +56,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Model\Record.cs" />
+    <Compile Include="View\RecordView.xaml.cs">
+      <DependentUpon>RecordView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\RecordViewModel.cs" />
+    <Compile Include="Model\Scan.cs" />
+    <Compile Include="View\ScanPartitionView.xaml.cs">
+      <DependentUpon>ScanPartitionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\ScanPartitionViewModel.cs" />
+    <Compile Include="View\SelectDiskView.xaml.cs">
+      <DependentUpon>SelectDiskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\SelectDiskViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\Command.cs" />
+    <Compile Include="Model\Disk.cs" />
+    <Compile Include="View\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="UI\Notifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,9 +109,32 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
-    <Folder Include="View\" />
+    <ProjectReference Include="..\Filesystem\Filesystem.Partition\Filesystem.Partition.csproj">
+      <Project>{6abfce00-ce6e-492f-96db-ee620f35f2ae}</Project>
+      <Name>Filesystem.Partition</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Util.IO\Util.IO.csproj">
+      <Project>{51c1440d-3fed-4ab3-b549-65a5417aa5ce}</Project>
+      <Name>Util.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="View\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\RecordView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ScanPartitionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SelectDiskView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
