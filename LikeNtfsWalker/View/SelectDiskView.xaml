@@ -34,7 +34,9 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Image></Image>
-                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                    <TextBlock Text="{Binding DriveName}"></TextBlock>
+                                    <TextBlock Text="{Binding DiskModel}"></TextBlock>
+                                    <TextBlock Text="{Binding FileSystem}"></TextBlock>
                                     <TextBlock Text="{Binding Size}"></TextBlock>
                                 </StackPanel>
                             </DataTemplate>

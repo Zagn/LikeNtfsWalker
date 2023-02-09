@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -107,7 +108,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Filesystem\Filesystem.Partition\Filesystem.Partition.csproj">
+      <Project>{6abfce00-ce6e-492f-96db-ee620f35f2ae}</Project>
+      <Name>Filesystem.Partition</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Util.IO\Util.IO.csproj">
+      <Project>{51c1440d-3fed-4ab3-b549-65a5417aa5ce}</Project>
+      <Name>Util.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Page Include="View\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -4,20 +4,20 @@ namespace LikeNtfsWalker.Model
 {
     public class Disk : Notifier
     {
-        // 디스크 이름
-        private string name;
+        // diskModel_ex : KXG60ZNV1T02 KIOXIA
+        private string diskModel;
 
-        public string Name
+        public string DiskModel
         {
-            get => name;
+            get => diskModel;
             set
             {
-                name = value;
+                diskModel = value;
                 RaisePropertyChanged();
             }
         }
 
-        // 디스크 사이즈
+        // 디스크 사이즈_totalSize
         private string size;
 
         public string Size
@@ -30,10 +30,37 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Disk(string name, string size)
+        //Disk FileSystem_ex : NTFS, FAT32, ...
+        private string fileSystem;
+        public string FileSystem
         {
-            this.name = name;
+            get => fileSystem;
+            set
+            {
+                fileSystem = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        //DriveName_ex : F, C, E, ...
+        private string driveName;
+        public string DriveName
+        {
+            get => driveName;
+            set
+            {
+                driveName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public Disk(string driveName, string diskModel, string size, string fileSystem)
+        {
+            this.driveName = driveName;
+            this.diskModel = diskModel;
             this.size = size;
+            this.fileSystem = fileSystem;
         }
     }
  }

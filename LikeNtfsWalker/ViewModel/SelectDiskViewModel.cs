@@ -1,14 +1,20 @@
 ﻿using LikeNtfsWalker.Model;
 using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
+using Filesystem.Partition;
+using System.Collections.Generic;
+using System.Management;
+using System;
+using System.IO;
+using System.Diagnostics;
 
 namespace LikeNtfsWalker.ViewModel
 {
     public class SelectDiskViewModel : Notifier
     {
-        private Disk newdisk;
+        private LikeNtfsWalker.Model.Disk newdisk;
 
-        public Disk NewDisk
+        public LikeNtfsWalker.Model.Disk NewDisk
         {
             get => newdisk;
             set
@@ -18,9 +24,9 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        private Disk selectdisk;
+        private LikeNtfsWalker.Model.Disk selectdisk;
 
-        public Disk SelectDisk
+        public LikeNtfsWalker.Model.Disk SelectDisk
         {
             get => selectdisk;
             set
@@ -31,8 +37,8 @@ namespace LikeNtfsWalker.ViewModel
         }
 
         // 디스크 리스트
-        private ObservableCollection<Disk> diskList;
-        public ObservableCollection<Disk> DiskList
+        private ObservableCollection<LikeNtfsWalker.Model.Disk> diskList;
+        public ObservableCollection<LikeNtfsWalker.Model.Disk> DiskList
         {
             get => diskList;
             set
@@ -42,8 +48,8 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        private ObservableCollection<Disk> logicalDiskList;
-        private ObservableCollection<Disk> physicalDiskList;
+        private ObservableCollection<LikeNtfsWalker.Model.Disk> logicalDiskList;
+        private ObservableCollection<LikeNtfsWalker.Model.Disk> physicalDiskList;
 
         // refresh 버튼
         public Command RefreshCommand { get; set; }
@@ -52,17 +58,47 @@ namespace LikeNtfsWalker.ViewModel
 
         public SelectDiskViewModel()
         {
-            logicalDiskList = new ObservableCollection<Disk>();
-            physicalDiskList = new ObservableCollection<Disk>();
+            logicalDiskList = new ObservableCollection<LikeNtfsWalker.Model.Disk>();
+            physicalDiskList = new ObservableCollection<LikeNtfsWalker.Model.Disk>();
             diskList = physicalDiskList;
             RefreshCommand = new Command(Refresh);
             SelectLogicalCommand = new Command(SelectLogical);
             SelectPhysicalCommand = new Command(SelectPhysical);
+
+            ManagementObjectSearcher driveQuery = new ManagementObjectSearcher("select * from Win32_DiskDrive");
+            foreach (ManagementObject d in driveQuery.Get())
+            {
+                Filesystem.Partition.Disk disk = new Filesystem.Partition.Disk(d);
+                physicalDiskList.Add(new LikeNtfsWalker.Model.Disk(disk.driveName + " ", disk.diskModel + " ", Convert.ToString((disk.totalSpace / (1024 * 1024 * 1024)) + "GB"), disk.fileSystem + " "));
+            }
+
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            foreach (DriveInfo d in allDrives)
+            {
+                logicalDiskList.Add(new LikeNtfsWalker.Model.Disk(d.Name + " ", "-Logical- ", Convert.ToString((d.TotalSize / (1024 * 1024 * 1024)) + "GB"), d.DriveFormat + " "));
+            }
         }
 
         public void Refresh(object parameter)
         {
+            //logicalDiskList.Add(new Disk("logical", "123"));
+            //physicalDiskList.Add(new Disk("physical", "567"));
 
+            physicalDiskList.Clear();
+            logicalDiskList.Clear();
+
+            ManagementObjectSearcher driveQuery = new ManagementObjectSearcher("select * from Win32_DiskDrive");
+            foreach (ManagementObject d in driveQuery.Get())
+            {
+                Filesystem.Partition.Disk disk = new Filesystem.Partition.Disk(d);
+                physicalDiskList.Add(new LikeNtfsWalker.Model.Disk(disk.driveName + " ", disk.diskModel + " ", Convert.ToString((disk.totalSpace / (1024 * 1024 * 1024)) + "GB"), disk.fileSystem + " "));
+            }
+
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            foreach (DriveInfo d in allDrives)
+            {
+                logicalDiskList.Add(new LikeNtfsWalker.Model.Disk(d.Name + " ", "-Logical- ", Convert.ToString((d.TotalSize / (1024 * 1024 * 1024)) + "GB"), d.DriveFormat + " "));
+            }
         }
 
         public void SelectLogical(object parameter)
