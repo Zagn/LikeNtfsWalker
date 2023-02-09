@@ -35,7 +35,7 @@ namespace Filesystem.Ntfs
         public ushort Signature;
         public byte[] Data;
 
-        public uint ClusterSize => (uint)BytesPerSector * SectorsPerCluster;
+        public uint ClusterSize;
         public ulong MftStartOffset;
 
   
@@ -44,7 +44,6 @@ namespace Filesystem.Ntfs
             //byte[] buffer = new byte[512]
             //stream.Read(buffer, 0, 3);
             //JmpCommand = ByteConverter_2.ToInt16(buffer); //<- 4바이트를 읽어서 16,32,64 / 3바이트만 읽을 수 있게 바꿔보기 /stream.ReadInt32(3)
-            MftStartOffset = ClusterSize * LogicalClusterNumberForTheFileMFT + (ulong)stream.Position;
 
             JmpCommand = stream.ReadUInt32(3);
             OemID = stream.ReadString(8);
@@ -68,6 +67,9 @@ namespace Filesystem.Ntfs
             Checksum = stream.ReadUInt32();
             stream.Seek(426, SeekOrigin.Current);
             Signature = stream.ReadUInt16();
+
+            ClusterSize = (uint)BytesPerSector * SectorsPerCluster;
+            MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT + ((ulong)stream.Position) - 512);
         }
     }
 }
