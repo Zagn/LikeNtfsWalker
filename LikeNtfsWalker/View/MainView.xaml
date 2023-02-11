@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=local:MainViewModel}">
+        Title="LIKENTFS" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=local:MainViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -20,7 +20,7 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
-        <UserControl Content="{Binding CurrentView}" Grid.Column="1" Grid.Row="1"/>
+        <UserControl Content="{Binding CurrentView}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1"/>
 
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>

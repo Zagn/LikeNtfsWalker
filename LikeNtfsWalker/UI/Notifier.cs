@@ -6,7 +6,7 @@ namespace LikeNtfsWalker.UI
 {
     public class Notifier : INotifyPropertyChanged
     {
-        private Disk newdisk;
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void RaisePropertyChanged([CallerMemberName] string propName = null)

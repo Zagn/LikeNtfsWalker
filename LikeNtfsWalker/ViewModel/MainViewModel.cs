@@ -1,8 +1,9 @@
 ﻿using LikeNtfsWalker.UI;
 using LikeNtfsWalker.View;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
+
+using Application = System.Windows.Application;
 
 namespace LikeNtfsWalker.ViewModel
 {
@@ -26,11 +27,10 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        // 다음 버튼
         public Command GotoNextCommand { get; set; }
-        // 이전 버튼
+
         public Command GotoPrevCommand { get; set; }
-        // 나가기 버튼
+
         public Command ExitCommand { get; set; }
 
         private Stack<UserControl> views;
@@ -47,26 +47,31 @@ namespace LikeNtfsWalker.ViewModel
             ExitCommand = new Command(Exit);
         }
 
-        // 다음 버튼 이벤트
         private void GotoNext(object parameter)
         {
             switch (state)
             {
                 case ViewState.SelectDrive:
-                    views.Push(CurrentView);
-                    CurrentView = new ScanPartitionWindow();
-                    state = ViewState.SelectPartition;
+                    if(currentView.DataContext is SelectDiskViewModel selectDiskVM)
+                    {
+                        // 선택한 Disk가 MBR인지 확인
+                        views.Push(CurrentView);
+                        CurrentView = new ScanPartitionWindow(selectDiskVM.SelectDisk);
+                        state = ViewState.SelectPartition;
+                    }
                     break;
 
                 case ViewState.SelectPartition:
-                    views.Push(CurrentView);
-                    CurrentView = new RecordView();
-                    state = ViewState.ViewRecord;
+                    if(currentView.DataContext is ScanPartitionViewModel)
+                    {
+                        views.Push(CurrentView);
+                        CurrentView = new RecordView();
+                        state = ViewState.ViewRecord;
+                    }
                     break;
             }
         }
 
-        // 이전 버튼 이벤트
         private void GotoPrevious(object parameter)
         {
             switch (state)
@@ -82,7 +87,6 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        //  나가기 버튼 이벤트
         private void Exit(object parameter)
         {
             Application.Current.MainWindow.Close();

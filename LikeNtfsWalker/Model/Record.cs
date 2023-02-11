@@ -81,5 +81,15 @@ namespace LikeNtfsWalker.Model
                 RaisePropertyChanged();
             }
         }
+
+        public Record(string id, string filename, string state, string cdate, string mdate, string attributes)
+        {
+            this.id = id;
+            this.filename = filename;
+            this.state = state;
+            this.cdate = cdate;
+            this.mdate = mdate;
+            this.attributes = attributes;
+        }
     }
 }

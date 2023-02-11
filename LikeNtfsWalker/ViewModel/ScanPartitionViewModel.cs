@@ -4,19 +4,20 @@ using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
 using Filesystem.Ntfs;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace LikeNtfsWalker.ViewModel
 {
     public class ScanPartitionViewModel : Notifier
     {
-        private Scan newparttition;
+        private Scan selectparttition;
 
-        public Scan NewParttition
+        public Scan SelectParttition
         {
-            get => newparttition;
+            get => selectparttition;
             set
             {
-                newparttition = value;
+                selectparttition = value;
                 RaisePropertyChanged();
             }
         }
@@ -24,25 +25,32 @@ namespace LikeNtfsWalker.ViewModel
         public ObservableCollection<Scan> ScanList { get; set; }
 
 
-        public ScanPartitionViewModel(Model.Disk disk) 
-        { 
+        public ScanPartitionViewModel(Model.Disk disk)
+        {
             ScanList = new ObservableCollection<Scan>();
-            Mbr mbr = new Mbr(disk.FilePath);
 
-            string partitionType;
+            try
+            {
+                string partitionType;
+                Mbr mbr = new Mbr(disk.FilePath);
 
-            if (mbr.signature != 21930) //Signature Value
-            {
-                ScanList.Add(new Scan("There is no MBR", ""));
-            }
-            else
-            {
-                foreach (var partition in mbr.partitions)
+                if (mbr.signature != 21930) //Signature Value
                 {
-                    partitionType = GetPartitionType(partition.PartitionType);
-                    //ScanList.Add(new Scan(partitionType);
+                    ScanList.Add(new Scan("There is no MBR", ""));
                 }
+                else
+                {
+                    foreach (var partition in mbr.partitions)
+                    {
+                        partitionType = GetPartitionType(partition.PartitionType);
+                        //ScanList.Add(new Scan(partitionType);
+                    }
 
+                }
+            }
+            catch
+            {
+                MessageBox.Show("파티션 테이블이 MBR이 아닙니다.");
             }
         }
 

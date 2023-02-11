@@ -31,8 +31,8 @@ namespace LikeNtfsWalker.Model
 
         public Scan(string name, string fileSystem)
         {
-            Name = name;
-            FileSystem = fileSystem;
+            this.name = name;
+            this.fileSystem = fileSystem;
         }
     }
 }

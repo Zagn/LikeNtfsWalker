@@ -1,4 +1,5 @@
-﻿using LikeNtfsWalker.ViewModel;
+﻿using LikeNtfsWalker.Model;
+using LikeNtfsWalker.ViewModel;
 using System.Windows.Controls;
 
 namespace LikeNtfsWalker.View
@@ -8,10 +9,10 @@ namespace LikeNtfsWalker.View
     /// </summary>
     public partial class ScanPartitionWindow : UserControl
     {
-        public ScanPartitionWindow()
+        public ScanPartitionWindow(Disk disk)
         {
             InitializeComponent();
-            DataContext = new ScanPartitionViewModel(null);
+            DataContext = new ScanPartitionViewModel(disk);
         }
     }
 }

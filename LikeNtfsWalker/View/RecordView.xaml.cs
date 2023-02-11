@@ -1,4 +1,5 @@
-﻿using LikeNtfsWalker.ViewModel;
+﻿using LikeNtfsWalker.Model;
+using LikeNtfsWalker.ViewModel;
 using System.Windows.Controls;
 
 namespace LikeNtfsWalker.View

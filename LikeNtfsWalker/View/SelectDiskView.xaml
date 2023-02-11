@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
         mc:Ignorable="d"
-        Height="360" Width="760" d:DataContext="{d:DesignInstance Type=local:SelectDiskViewModel}">
+        d:DataContext="{d:DesignInstance Type=local:SelectDiskViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -17,39 +17,58 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <TabControl VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1">
+        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedIndex="{Binding SelectedTabIndex}">
             <TabItem Header="Select disk to scan">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <Button Width="100" Height="30" Command="{Binding SelectPhysicalCommand}" Content="Physical"/>
-
-                    <Button Width="100" Height="30" Command="{Binding SelectLogicalCommand}" Content="Logical" Margin="0, 100, 0,0"/>
-
-                    <ListView Margin="0,0,0,36" ItemsSource="{Binding DiskList}" Grid.Column="1">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image></Image>
-                                    <TextBlock Text="{Binding DriveName}"></TextBlock>
-                                    <TextBlock Text="{Binding DiskModel}"></TextBlock>
-                                    <TextBlock Text="{Binding FileSystem}"></TextBlock>
-                                    <TextBlock Text="{Binding Size}"></TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                    <ListView  ItemsSource="{Binding DiskList}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectDisk}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Drive Name" Width="200" DisplayMemberBinding="{Binding DriveName}"/>
+                                <GridViewColumn Header="Dirve Model" Width="200" DisplayMemberBinding="{Binding DiskModel}"/>
+                                <GridViewColumn Header="File System" Width="200" DisplayMemberBinding="{Binding FileSystem}"/>
+                                <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"/>
+                            </GridView>
+                        </ListView.View>
                     </ListView>
-                    <Button Content="Refresh list" HorizontalAlignment="Center" Margin="0,280,0,0" VerticalAlignment="Top" Height="31" Width="734" Command="{Binding RefreshCommand}" Grid.Column="1"/>
+                    <Button Content="Refresh list" Command="{Binding RefreshCommand}" Grid.Column="1" Grid.Row="3"/>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Advanced">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock HorizontalAlignment="Left" Height="22" Margin="50,75,0,0" TextWrapping="Wrap" Text="Select disk image file to scan : " VerticalAlignment="Top" Width="173"/>
-                    <TextBox HorizontalAlignment="Left" Height="22" Margin="50,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="340"/>
-                    <Button Content="Browse..." HorizontalAlignment="Left" Height="22" Margin="407,98,0,0" VerticalAlignment="Top" Width="101" Command="{Binding BrowseImageCommand}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Select disk image file to scan : " Grid.Column="2" Grid.Row="2" />
+                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectDisk.FilePath}" Grid.Column="2" Grid.Row="4" IsReadOnly="True"/>
+                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="Browse..."  Command="{Binding BrowseImageCommand}" Grid.Column="4" Grid.Row="4"/>
                 </Grid>
             </TabItem>
         </TabControl>
