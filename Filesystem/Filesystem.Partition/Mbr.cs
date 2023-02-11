@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Util.IO;
 
-namespace Partition
+namespace Filesystem.Partition
 {
     public class Mbr
     {
@@ -15,12 +15,14 @@ namespace Partition
         byte[] buff = new byte[8];
         byte[] buffToSig = new byte[2];
 
-        ushort signature;
+        public ushort signature;
         public List<Partition> partitions;
+
+        DeviceStream stream;
 
         public Mbr(string path)
         {
-            var stream = new DeviceStream(path, 512);
+            stream = new DeviceStream(path, 512);
 
             isLittle = BitConverter.IsLittleEndian;
 
@@ -38,11 +40,7 @@ namespace Partition
 
             signature = BitConverter.ToUInt16(buffToSig, 0);
 
-            if (signature != 21930) //Signature Value
-            {
-                Console.WriteLine("Can't find MBR");
-                return;
-            }
+            
 
             for (int i = 0; i < 4; i++)
             {

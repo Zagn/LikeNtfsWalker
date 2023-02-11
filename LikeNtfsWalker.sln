@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{28C956DE-0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.IO", "Util.IO\Util.IO.csproj", "{51C1440D-3FED-4AB3-B549-65A5417AA5CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Partition", "Partition\Partition.csproj", "{6ABFCE00-CE6E-492F-96DB-EE620F35F2AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filesystem.Partition", "Filesystem\Filesystem.Partition\Filesystem.Partition.csproj", "{6ABFCE00-CE6E-492F-96DB-EE620F35F2AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
