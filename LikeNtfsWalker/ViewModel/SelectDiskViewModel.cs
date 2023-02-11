@@ -60,7 +60,7 @@ namespace LikeNtfsWalker.ViewModel
                 Debug.WriteLine("Error occur \"getPhysicalDiskList()\"");
 
             RefreshCommand = new Command(Refresh);
-              BrowseImageCommand = new Command(BrowsImage);
+            BrowseImageCommand = new Command(BrowsImage);
         }
 
         public void Refresh(object parameter)

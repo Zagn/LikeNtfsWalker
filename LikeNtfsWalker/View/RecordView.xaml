@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
         mc:Ignorable="d"
-        Height="360" Width="760" d:DataContext="{d:DesignInstance Type=local:RecordViewModel}">
+        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DataContext="{d:DesignInstance Type=local:RecordViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="100*"/>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,48 +19,58 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <Button Grid.Column="1" Grid.Row="1" Content="Save" Grid.ColumnSpan="2"/>
-        <TabControl Grid.Column="1" Grid.Row="3">
-            <TabItem Header="MFT Records">
-                <Grid Background="#FFE5E5E5">
-                    <ListView>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="MFT #" Width="50"/>
-                                <GridViewColumn Header="File name" Width="100"/>
-                                <GridViewColumn Header="Size" Width="100"/>
-                                <GridViewColumn Header="Date created" Width="100"/>
-                                <GridViewColumn Header="Date modified" Width="100"/>
-                                <GridViewColumn Header="Attributes" Width="100"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Grid>
-            </TabItem>
-            <TabItem Header="TabItem">
-                <Grid Background="#FFE5E5E5">
-                </Grid>
-            </TabItem>
-        </TabControl>
-        <TabControl  Grid.Column="2" Grid.Row="3">
-            <TabItem Header="File imformation">
-                <Grid Background="#FFE5E5E5">
-                    <ListView>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Property" Width="100"/>
-                                <GridViewColumn Header="Description" Width="100"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Preview">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="HexData">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-        </TabControl>
+        <Button Grid.Column="1" Grid.Row="1" Content="Save" Command="{Binding SaveCommand}"/>
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TabControl Grid.Column="0">
+                <TabItem Header="MFT Records">
+                    <Grid Background="#FFE5E5E5">
+                        <ListView ItemsSource="{Binding RecordList}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="MFT #" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                    <GridViewColumn Header="File name" Width="100" DisplayMemberBinding="{Binding FileName}"/>
+                                    <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"/>
+                                    <GridViewColumn Header="Date created" Width="100" DisplayMemberBinding="{Binding CDate}"/>
+                                    <GridViewColumn Header="Date modified" Width="100" DisplayMemberBinding="{Binding MDate}"/>
+                                    <GridViewColumn Header="Attributes" Width="100" DisplayMemberBinding="{Binding Attributes}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="TabItem">
+                    <Grid Background="#FFE5E5E5">
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            
+            <TabControl  Grid.Column="2">
+                <TabItem Header="File imformation">
+                    <Grid Background="#FFE5E5E5">
+                        <ListView ItemsSource="{Binding Fileinfolist}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Property" Width="100"/>
+                                    <GridViewColumn Header="Description" Width="100"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Preview">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+                <TabItem Header="HexData">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </UserControl>

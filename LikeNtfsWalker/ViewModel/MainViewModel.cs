@@ -62,10 +62,10 @@ namespace LikeNtfsWalker.ViewModel
                     break;
 
                 case ViewState.SelectPartition:
-                    if(currentView.DataContext is ScanPartitionViewModel)
+                    if(currentView.DataContext is ScanPartitionViewModel scanPartitionVM)
                     {
                         views.Push(CurrentView);
-                        CurrentView = new RecordView();
+                        CurrentView = new RecordView(scanPartitionVM.SelectParttition);
                         state = ViewState.ViewRecord;
                     }
                     break;
