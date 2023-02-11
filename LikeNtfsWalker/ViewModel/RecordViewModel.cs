@@ -8,7 +8,7 @@ namespace LikeNtfsWalker.ViewModel
     {
         private ObservableCollection<Record> recordslist;
 
-        public ObservableCollection<Record> REcordList
+        public ObservableCollection<Record> RecordList
         {
             get => recordslist;
             set
@@ -32,7 +32,7 @@ namespace LikeNtfsWalker.ViewModel
 
         public Command SaveCommand { get; set; }
 
-        public RecordViewModel()
+        public RecordViewModel(Scan scan)
         {
             recordslist = new ObservableCollection<Record>();
             fileinfolist = new ObservableCollection<Record>();
@@ -41,8 +41,14 @@ namespace LikeNtfsWalker.ViewModel
 
         public void Savefile(object parameter)
         {
-            // 스캔한 정보 파일로 저장
+            RecordList.Add(new Record("1", "2", "3", "4", "5", "6", "7", "8"));
 
+            // 선택한 정보를 저장
+           /* var dialog = new System.Windows.Forms.SaveFileDialog();
+
+            dialog.CheckPathExists = true;
+
+            dialog.ShowDialog();*/
         }
     }
 }

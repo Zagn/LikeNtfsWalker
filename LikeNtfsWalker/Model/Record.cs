@@ -1,4 +1,5 @@
 ﻿using LikeNtfsWalker.UI;
+using System.IO;
 
 namespace LikeNtfsWalker.Model
 {
@@ -31,14 +32,14 @@ namespace LikeNtfsWalker.Model
         }
 
         // 상태
-        private string state;
+        private string size;
 
-        public string State
+        public string Size
         {
-            get => state;
+            get => size;
             set
             {
-                state = value;
+                size = value;
                 RaisePropertyChanged();
             }
         }
@@ -82,14 +83,44 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Record(string id, string filename, string state, string cdate, string mdate, string attributes)
+        // Property
+        private string property;
+
+        public string Property
+        {
+            get => property;
+            set
+            {
+                property = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // Description
+        private string description;
+
+        public string Description
+        {
+            get => description;
+            set
+            {
+                description = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Stream DataStream { get; set; }
+
+        public Record(string id, string filename, string size, string cdate, string mdate, string attributes, string property, string description)
         {
             this.id = id;
             this.filename = filename;
-            this.state = state;
+            this.size= size;
             this.cdate = cdate;
             this.mdate = mdate;
             this.attributes = attributes;
+            this.property = property;
+            this.description = description;
         }
     }
 }
