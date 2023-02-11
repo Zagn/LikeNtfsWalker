@@ -28,6 +28,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"></TextBlock>
+                    <TextBlock Text="{Binding FileSystem}"></TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.View >

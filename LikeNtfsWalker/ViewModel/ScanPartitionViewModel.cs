@@ -25,24 +25,25 @@ namespace LikeNtfsWalker.ViewModel
         public ObservableCollection<Scan> ScanList { get; set; }
 
 
-        public ScanPartitionViewModel(Model.Disk disk) 
-        { 
+        public ScanPartitionViewModel(Model.Disk disk)
+        {
             ScanList = new ObservableCollection<Scan>();
 
-            //mbr인지 확인문
             try
             {
+                string partitionType;
                 Mbr mbr = new Mbr(disk.FilePath);
 
                 if (mbr.signature != 21930) //Signature Value
                 {
-                    ScanList.Add(new Scan("There is no MBR"));
+                    ScanList.Add(new Scan("There is no MBR", ""));
                 }
                 else
                 {
                     foreach (var partition in mbr.partitions)
                     {
-                        //ScanList.Add(new Scan(partition.PartitionType.ToString()));
+                        partitionType = GetPartitionType(partition.PartitionType);
+                        //ScanList.Add(new Scan(partitionType);
                     }
 
                 }
@@ -50,6 +51,20 @@ namespace LikeNtfsWalker.ViewModel
             catch
             {
                 MessageBox.Show("파티션 테이블이 MBR이 아닙니다.");
+            }
+        }
+
+        public string GetPartitionType(int type)
+        {
+            switch (type)
+            {
+                case 12:
+                    return "FAT32";
+                case 7:
+                    return "NTFS";
+
+                default:
+                    return "";
             }
         }
     }
