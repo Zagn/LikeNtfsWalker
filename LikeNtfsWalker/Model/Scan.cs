@@ -19,7 +19,7 @@ namespace LikeNtfsWalker.Model
 
         public Scan(string name)
         {
-            Name = name;
+            this.name = name;
         }
     }
 }

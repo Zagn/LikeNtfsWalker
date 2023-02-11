@@ -24,15 +24,15 @@
         <TabControl Grid.Column="1" Grid.Row="3">
             <TabItem Header="MFT Records">
                 <Grid Background="#FFE5E5E5">
-                    <ListView d:ItemsSource="{d:SampleData ItemCount=5}" >
+                    <ListView>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="MFT #"/>
-                                <GridViewColumn Header="File name"/>
-                                <GridViewColumn Header="Size"/>
-                                <GridViewColumn Header="Date created"/>
-                                <GridViewColumn Header="Date modified"/>
-                                <GridViewColumn Header="Attributes"/>
+                                <GridViewColumn Header="MFT #" Width="50"/>
+                                <GridViewColumn Header="File name" Width="100"/>
+                                <GridViewColumn Header="Size" Width="100"/>
+                                <GridViewColumn Header="Date created" Width="100"/>
+                                <GridViewColumn Header="Date modified" Width="100"/>
+                                <GridViewColumn Header="Attributes" Width="100"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -40,23 +40,17 @@
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="13*"/>
-                        <ColumnDefinition Width="8*"/>
-                        <ColumnDefinition Width="387*"/>
-                    </Grid.ColumnDefinitions>
-
                 </Grid>
             </TabItem>
         </TabControl>
         <TabControl  Grid.Column="2" Grid.Row="3">
             <TabItem Header="File imformation">
                 <Grid Background="#FFE5E5E5">
-                    <ListView d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListView>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Property"/>
-                                <GridViewColumn Header="Description"/>
+                                <GridViewColumn Header="Property" Width="100"/>
+                                <GridViewColumn Header="Description" Width="100"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
