@@ -54,13 +54,24 @@ namespace LikeNtfsWalker.Model
             }
         }
 
+        private string filePath;
+        public string FilePath
+        {
+            get => filePath;
+            set
+            {
+                filePath= value;
+                RaisePropertyChanged();
+            }
+        }
 
-        public Disk(string driveName, string diskModel, string size, string fileSystem)
+        public Disk(string driveName, string diskModel, string size, string fileSystem, string filePath)
         {
             this.driveName = driveName;
             this.diskModel = diskModel;
             this.size = size;
             this.fileSystem = fileSystem;
+            this.filePath = filePath;
         }
     }
  }

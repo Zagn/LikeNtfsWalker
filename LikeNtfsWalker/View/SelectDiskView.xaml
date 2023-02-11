@@ -49,7 +49,7 @@
                 <Grid Background="#FFE5E5E5">
                     <TextBlock HorizontalAlignment="Left" Height="22" Margin="50,75,0,0" TextWrapping="Wrap" Text="Select disk image file to scan : " VerticalAlignment="Top" Width="173"/>
                     <TextBox HorizontalAlignment="Left" Height="22" Margin="50,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="340"/>
-                    <Button Content="Browse..." HorizontalAlignment="Left" Height="22" Margin="407,98,0,0" VerticalAlignment="Top" Width="101"/>
+                    <Button Content="Browse..." HorizontalAlignment="Left" Height="22" Margin="407,98,0,0" VerticalAlignment="Top" Width="101" Command="{Binding BrowseImageCommand}"/>
                 </Grid>
             </TabItem>
         </TabControl>

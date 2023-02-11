@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -109,6 +110,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Filesystem\Filesystem.Ntfs\Filesystem.Ntfs.csproj">
+      <Project>{575e0472-b09c-4f5d-8834-2029187f04e0}</Project>
+      <Name>Filesystem.Ntfs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Filesystem\Filesystem.Partition\Filesystem.Partition.csproj">
       <Project>{6abfce00-ce6e-492f-96db-ee620f35f2ae}</Project>
       <Name>Filesystem.Partition</Name>

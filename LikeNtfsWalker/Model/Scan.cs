@@ -16,5 +16,10 @@ namespace LikeNtfsWalker.Model
                 RaisePropertyChanged();
             }
         }
+
+        public Scan(string name)
+        {
+            Name = name;
+        }
     }
 }
