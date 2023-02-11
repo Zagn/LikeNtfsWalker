@@ -27,19 +27,36 @@ namespace LikeNtfsWalker.ViewModel
         public ScanPartitionViewModel(Model.Disk disk) 
         { 
             ScanList = new ObservableCollection<Scan>();
-
             Mbr mbr = new Mbr(disk.FilePath);
+
+            string partitionType;
 
             if (mbr.signature != 21930) //Signature Value
             {
-                ScanList.Add(new Scan("There is no MBR"));
+                ScanList.Add(new Scan("There is no MBR", ""));
             }
             else
             {
                 foreach (var partition in mbr.partitions)
                 {
-                    //ScanList.Add(new Scan(partition.PartitionType.ToString()));
+                    partitionType = GetPartitionType(partition.PartitionType);
+                    //ScanList.Add(new Scan(partitionType);
                 }
+
+            }
+        }
+
+        public string GetPartitionType(int type)
+        {
+            switch (type)
+            {
+                case 12:
+                    return "FAT32";
+                case 7:
+                    return "NTFS";
+
+                default:
+                    return "";
 
             }
         }

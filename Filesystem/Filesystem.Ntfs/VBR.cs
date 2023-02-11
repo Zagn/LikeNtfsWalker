@@ -70,6 +70,9 @@ namespace Filesystem.Ntfs
 
             ClusterSize = (uint)BytesPerSector * SectorsPerCluster;
             MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT + ((ulong)stream.Position) - 512);
+
+            stream.Position = (long)MftStartOffset;
+            FindVolumeLable findVolumeLable = new FindVolumeLable(stream);
         }
     }
 }

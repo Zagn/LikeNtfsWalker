@@ -115,9 +115,11 @@ namespace LikeNtfsWalker.ViewModel
         //    {
         //        var disks = new ObservableCollection<Model.Disk>();
         //        DriveInfo[] allDrives = DriveInfo.GetDrives();
+               
         //        foreach (DriveInfo d in allDrives)
         //        {
         //            disks.Add(new Model.Disk(d.Name + " ", "-Logical- ", Convert.ToString((d.TotalSize / (1024 * 1024 * 1024)) + "GB"), d.DriveFormat + " "));
+                    
         //        }
         //        return disks;
         //    }

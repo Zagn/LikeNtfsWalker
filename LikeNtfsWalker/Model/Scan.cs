@@ -17,9 +17,22 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Scan(string name)
+        private string fileSystem;
+
+        public string FileSystem
+        {
+            get => fileSystem;
+            set
+            {
+                fileSystem = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Scan(string name, string fileSystem)
         {
             Name = name;
+            FileSystem = fileSystem;
         }
     }
 }
