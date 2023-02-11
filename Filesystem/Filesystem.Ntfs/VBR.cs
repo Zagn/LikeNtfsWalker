@@ -38,6 +38,7 @@ namespace Filesystem.Ntfs
         public uint ClusterSize;
         public ulong MftStartOffset;
 
+        public string Lable;
   
         public VBR(Stream stream)
         {
@@ -72,7 +73,7 @@ namespace Filesystem.Ntfs
             MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT + ((ulong)stream.Position) - 512);
 
             stream.Position = (long)MftStartOffset;
-            FindVolumeLable findVolumeLable = new FindVolumeLable(stream);
+            Lable = VolumeLable.FromNtfs(stream);
         }
     }
 }

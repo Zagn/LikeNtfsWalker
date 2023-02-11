@@ -57,7 +57,6 @@ namespace LikeNtfsWalker.ViewModel
 
                 default:
                     return "";
-
             }
         }
     }
