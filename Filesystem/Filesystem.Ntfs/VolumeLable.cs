@@ -42,7 +42,7 @@ namespace Filesystem.Ntfs
                     attrStartPos += attrLen;
                 }
             }
-            return null;
+            return "<null>";
         }
     }
 }

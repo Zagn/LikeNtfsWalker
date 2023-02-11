@@ -69,11 +69,13 @@ namespace Filesystem.Ntfs
             stream.Seek(426, SeekOrigin.Current);
             Signature = stream.ReadUInt16();
 
+            //Get Disk Lable//////////////////////////
             ClusterSize = (uint)BytesPerSector * SectorsPerCluster;
             MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT + ((ulong)stream.Position) - 512);
 
             stream.Position = (long)MftStartOffset;
-            Lable = VolumeLable.FromNtfs(stream);
+            Lable = VolumeLable.FromNtfs(stream).Replace("\0", "");
+            ///////////////////////////////////////////
         }
     }
 }

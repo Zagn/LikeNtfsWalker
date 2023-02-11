@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using Filesystem.Ntfs;
 using System.Collections.Generic;
 using System.Windows;
+using Util.IO;
+using System.Linq.Expressions;
 
 namespace LikeNtfsWalker.ViewModel
 {
@@ -31,8 +33,9 @@ namespace LikeNtfsWalker.ViewModel
 
             try
             {
-                string partitionType;
                 Mbr mbr = new Mbr(disk.FilePath);
+
+                DeviceStream stream = new DeviceStream(disk.FilePath, 512);
 
                 if (mbr.signature != 21930) //Signature Value
                 {
@@ -42,8 +45,10 @@ namespace LikeNtfsWalker.ViewModel
                 {
                     foreach (var partition in mbr.partitions)
                     {
-                        partitionType = GetPartitionType(partition.PartitionType);
-                        //ScanList.Add(new Scan(partitionType);
+                        stream.Position = (long)partition.StartingLBAAddr * 512;
+                        VBR vbr = new VBR(stream); //VBR 넘겨줄깜?
+
+                        ScanList.Add(new Scan(vbr.Lable, GetPartitionType(partition.PartitionType)));
                     }
 
                 }
