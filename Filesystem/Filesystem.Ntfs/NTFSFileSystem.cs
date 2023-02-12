@@ -12,22 +12,24 @@ namespace Filesystem.Ntfs
         public Stream Stream;
         public VBR vbr;
         public MFTEntryHeader mfth;
-        internal List<MftEntry> MftEntries;
+        //internal List<MftEntry> MftEntries;
 
         public NTFSFileSystem(Stream stream)
         {
             Stream = stream;
+            BuildFilesystem();
         }
 
         public void BuildFilesystem()
         {
             vbr = new VBR(Stream);
+            Stream.Position = (long)vbr.MftStartOffset;
             mfth = new MFTEntryHeader(Stream);
         }
 
         ~NTFSFileSystem()
         {
-            Stream.Close();
+            //Stream.Close();
         }
     }
 }

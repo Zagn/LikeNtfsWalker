@@ -30,27 +30,24 @@ namespace LikeNtfsWalker.ViewModel
         public ScanPartitionViewModel(Model.Disk disk)
         {
             ScanList = new ObservableCollection<Scan>();
-
+            
             try
             {
                 Mbr mbr = new Mbr(disk.FilePath);
-
                 DeviceStream stream = new DeviceStream(disk.FilePath, 512);
 
                 if (mbr.signature != 21930) //Signature Value
                 {
-                    ScanList.Add(new Scan("There is no MBR", ""));
+                    ScanList.Add(new Scan("There is no MBR", "", null));
                 }
                 else
                 {
                     foreach (var partition in mbr.partitions)
                     {
                         stream.Position = (long)partition.StartingLBAAddr * 512;
-                        VBR vbr = new VBR(stream); //VBR 넘겨줄깜?
-
-                        ScanList.Add(new Scan(vbr.Lable, GetPartitionType(partition.PartitionType)));
+                        NTFSFileSystem ntfsFileSystem = new NTFSFileSystem(stream);
+                        ScanList.Add(new Scan(ntfsFileSystem.vbr.Lable, GetPartitionType(partition.PartitionType), ntfsFileSystem));
                     }
-
                 }
             }
             catch
