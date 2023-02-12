@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using Util.IO;
 
 namespace Filesystem.Ntfs
@@ -7,9 +11,11 @@ namespace Filesystem.Ntfs
     internal class MftEntry
     {
         public MFTEntryHeader Header { get; }
-        public List<MftAttribute> Attributes { get; }
+        public Dictionary<AttType, MftAttribute> Attributes { get; }
+        public Stream DataStream { get; }
+        
 
-        public MftEntry(Stream stream)
+        public MftEntry(Stream stream, int clusterSize)
         {
             Header = new MFTEntryHeader(stream);
 
@@ -24,32 +30,25 @@ namespace Filesystem.Ntfs
                 var isNonResident = stream.ReadBool();
                 var attOffset = stream.Seek(-9, SeekOrigin.Current);
                 var header = isNonResident ? (MftAttHeader)new NonResidentHeader(stream) : new ResidentHeader(stream);
-
-                var attDataStream = stream;
-                if (isNonResident)
-                {
-                    stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
-
-                    return;
-                    //var extents = clusterRunToExtents(((NonResidentHeader)header).ClusterRuns);
-                    //attDataStream = new PartialStream(extents);
-                }
-
-                //var attDataStream = isNonResident ? new PartialStream(clusterRunToExtents(((NonResidentHeader)header).ClusterRuns)) : stream;
+                var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : stream;
 
                 switch (header.Type)
                 {
                     case AttType.SIA:
-                        Attributes.Add(new StandardInformation(header, attDataStream));
+                        Attributes.Add(AttType.SIA, new StandardInformation(header, attDataStream));
                         break;
                     case AttType.FileName:
-                        Attributes.Add(new FileName(header, attDataStream));
+                        Attributes.Add(AttType.FileName, new FileName(header, attDataStream));
                         break;
                     case AttType.Data:
-                        Attributes.Add(new DataAttribute(header, attDataStream));
+                        DataStream = attDataStream;
+                        Attributes.Add(AttType.Data, new DataAttribute(header, attDataStream));
                         break;
                     case AttType.Bitmap:
-                        Attributes.Add(new Bitmap(header, attDataStream));
+                        Attributes.Add(AttType.Bitmap, new Bitmap(header, attDataStream));
+                        break;
+                    case AttType.VolumeName:
+                        Attributes.Add(AttType.VolumeName, new VolumeName(header, attDataStream));
                         break;
                     default:
                         stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
@@ -57,10 +56,25 @@ namespace Filesystem.Ntfs
                 }
             }
         }
+        
+        
 
-        //public List<Extent> clusterRunToExtents(List<ClusterRun> clusterRun)
-        //{
+        public PartialStream clusterRunToExtents(List<ClusterRun> clusterRun, Stream stream, int clusterSize)
+        {
+            var dataStream = new PartialStream(stream);
+            var padding = 0L;
 
-        //}
+            foreach (var cluster in clusterRun)
+            {
+                var startOffset = cluster.RunOffset * clusterSize;
+                var length = (long)cluster.RunLength * clusterSize;
+                dataStream.AddExtent(new Extent(startOffset + padding, length));
+
+                padding = startOffset;
+            }
+            
+            return dataStream;
+            
+        }
     }
 }
