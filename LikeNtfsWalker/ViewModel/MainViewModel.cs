@@ -1,8 +1,10 @@
 ﻿using LikeNtfsWalker.UI;
 using LikeNtfsWalker.View;
+using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Media.TextFormatting;
 using Application = System.Windows.Application;
 
 namespace LikeNtfsWalker.ViewModel
