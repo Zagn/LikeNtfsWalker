@@ -3,7 +3,7 @@ using LikeNtfsWalker.UI;
 
 namespace LikeNtfsWalker.Model
 {
-    public class Scan : Notifier
+    public class Partition : Notifier
     {
         // 파티션 이름
         private string name;
@@ -42,7 +42,7 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Scan(string name, string fileSystem, NTFSFileSystem ntfsFileSystem)
+        public Partition(string name, string fileSystem, NTFSFileSystem ntfsFileSystem)
         {
             this.name = name;
             this.fileSystem = fileSystem;

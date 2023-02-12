@@ -9,7 +9,7 @@ namespace LikeNtfsWalker.View
     /// </summary>
     public partial class RecordView : UserControl
     {
-        public RecordView(Scan scan)
+        public RecordView(Partition scan)
         {
             InitializeComponent();
             DataContext = new RecordViewModel(scan);

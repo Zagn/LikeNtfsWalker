@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
         <TextBlock VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="Select from the following partition to begin scanning : " />
 
-        <ListView VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="4" ItemsSource="{Binding ScanList}" SelectedItem="{Binding SelectParttition}">
+        <ListView VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="4" ItemsSource="{Binding Partitions}" SelectedItem="{Binding SelectedPartition}">
             <ListView.View >
                 <GridView >
                     <GridViewColumn Header="Partition Label" Width="150" DisplayMemberBinding="{Binding Name}"/>

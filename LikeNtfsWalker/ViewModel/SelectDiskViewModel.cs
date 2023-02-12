@@ -1,11 +1,8 @@
 ﻿using LikeNtfsWalker.Model;
 using LikeNtfsWalker.UI;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Management;
 using System.Windows.Forms;
 
@@ -13,14 +10,14 @@ namespace LikeNtfsWalker.ViewModel
 {
     public class SelectDiskViewModel : Notifier
     {
-        private Disk selectdisk;
+        private Disk selectedDisk;
 
-        public Disk SelectDisk
+        public Disk SelectedDisk
         {
-            get => selectdisk;
+            get => selectedDisk;
             set
             {
-                selectdisk = value;
+                selectedDisk = value;
                 RaisePropertyChanged();
             }
         }
@@ -32,7 +29,7 @@ namespace LikeNtfsWalker.ViewModel
             set
             {
                 selectedTabIndex = value;
-                SelectDisk = null;
+                SelectedDisk = null;
                 RaisePropertyChanged();
             }
         }
@@ -59,11 +56,11 @@ namespace LikeNtfsWalker.ViewModel
             if (diskList == null)
                 Debug.WriteLine("Error occur \"getPhysicalDiskList()\"");
 
-            RefreshCommand = new Command(Refresh);
-            BrowseImageCommand = new Command(BrowsImage);
+            RefreshCommand = new Command(ExecuteRefreshCommand);
+            BrowseImageCommand = new Command(ExecuteBrowsImageCommand);
         }
 
-        public void Refresh(object parameter)
+        public void ExecuteRefreshCommand(object parameter)
         {
             DiskList.Clear();
           
@@ -92,16 +89,16 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        public void BrowsImage(object parameter)
+        public void ExecuteBrowsImageCommand(object parameter)
         {
-            var dialog = new System.Windows.Forms.OpenFileDialog();
+            var dialog = new OpenFileDialog();
 
             dialog.CheckFileExists = true;
             dialog.CheckPathExists = true;
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                SelectDisk = new Disk("0", "0", "0", "0", dialog.FileName);
+                SelectedDisk = new Disk("0", "0", "0", "0", dialog.FileName);
             }
             else
             {

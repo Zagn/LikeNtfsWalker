@@ -1,36 +1,31 @@
-﻿using Filesystem.Partition;
-using LikeNtfsWalker.Model;
+﻿using Filesystem.Ntfs;
+using Filesystem.Partition;
 using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
-using Filesystem.Ntfs;
-using System.Collections.Generic;
 using System.Windows;
 using Util.IO;
-using System.Linq.Expressions;
-using System;
 
 namespace LikeNtfsWalker.ViewModel
 {
     public class ScanPartitionViewModel : Notifier
     {
-        private Scan selectparttition;
+        private Model.Partition selectedParttition;
 
-        public Scan SelectParttition
+        public Model.Partition SelectedPartition
         {
-            get => selectparttition;
+            get => selectedParttition;
             set
             {
-                selectparttition = value;
+                selectedParttition = value;
                 RaisePropertyChanged();
             }
         }
 
-        public ObservableCollection<Scan> ScanList { get; set; }
-
+        public ObservableCollection<Model.Partition> Partitions { get; set; }
 
         public ScanPartitionViewModel(Model.Disk disk)
         {
-            ScanList = new ObservableCollection<Scan>();
+            Partitions = new ObservableCollection<Model.Partition>();
             
             try
             {
@@ -39,7 +34,7 @@ namespace LikeNtfsWalker.ViewModel
 
                 if (mbr.signature != 21930) //Signature Value
                 {
-                    ScanList.Add(new Scan("There is no MBR", "", null));
+                    Partitions.Add(new Model.Partition("There is no MBR", "", null));
                 }
                 else
                 {
@@ -47,7 +42,7 @@ namespace LikeNtfsWalker.ViewModel
                     {
                         stream.Position = (long)partition.StartingLBAAddr * 512;
                         NTFSFileSystem ntfsFileSystem = new NTFSFileSystem(stream);
-                        ScanList.Add(new Scan(ntfsFileSystem.vbr.Lable, GetPartitionType(partition.PartitionType), ntfsFileSystem));
+                        Partitions.Add(new Model.Partition(ntfsFileSystem.vbr.Lable, GetPartitionType(partition.PartitionType), ntfsFileSystem));
                     }
                 }
             }

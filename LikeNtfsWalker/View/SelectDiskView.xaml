@@ -32,7 +32,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
-                    <ListView  ItemsSource="{Binding DiskList}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectDisk}">
+                    <ListView  ItemsSource="{Binding DiskList}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectedDisk}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Drive Name" Width="200" DisplayMemberBinding="{Binding DriveName}"/>
@@ -67,7 +67,7 @@
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="Select disk image file to scan : " Grid.Column="2" Grid.Row="2" />
-                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelectDisk.FilePath}" Grid.Column="2" Grid.Row="4" IsReadOnly="True"/>
+                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding SelecetedDisk.FilePath}" Grid.Column="2" Grid.Row="4" IsReadOnly="True"/>
                     <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="Browse..."  Command="{Binding BrowseImageCommand}" Grid.Column="4" Grid.Row="4"/>
                 </Grid>
             </TabItem>

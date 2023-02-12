@@ -13,5 +13,8 @@ namespace LikeNtfsWalker.View
             InitializeComponent();
             DataContext = new MainViewModel();
         }
+
+        // close 함수
+        // viewmodel에서 함수 생성 후 알아서 하세요ㅎㅎㅎ
     }
 }

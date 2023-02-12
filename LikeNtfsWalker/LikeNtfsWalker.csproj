@@ -61,12 +61,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Record.cs" />
+    <Compile Include="Model\FileInfo.cs" />
+    <Compile Include="Model\MftRecord.cs" />
     <Compile Include="View\RecordView.xaml.cs">
       <DependentUpon>RecordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\RecordViewModel.cs" />
-    <Compile Include="Model\Scan.cs" />
+    <Compile Include="Model\Partition.cs" />
     <Compile Include="View\ScanPartitionView.xaml.cs">
       <DependentUpon>ScanPartitionView.xaml</DependentUpon>
     </Compile>

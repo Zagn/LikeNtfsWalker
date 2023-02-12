@@ -1,15 +1,13 @@
 ﻿using LikeNtfsWalker.UI;
 using LikeNtfsWalker.View;
-using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.TextFormatting;
 using Application = System.Windows.Application;
 
 namespace LikeNtfsWalker.ViewModel
 {
-    enum ViewState
+    public enum ViewState
     {
         SelectDrive,
         SelectPartition,
@@ -36,7 +34,18 @@ namespace LikeNtfsWalker.ViewModel
         public Command ExitCommand { get; set; }
 
         private Stack<UserControl> views;
+
         private ViewState state;
+
+        public ViewState State
+        {
+            get => state;
+            set
+            {
+                state = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public MainViewModel()
         {
@@ -51,24 +60,36 @@ namespace LikeNtfsWalker.ViewModel
 
         private void GotoNext(object parameter)
         {
-            switch (state)
+            switch (State)
             {
                 case ViewState.SelectDrive:
-                    if(currentView.DataContext is SelectDiskViewModel selectDiskVM)
+                    if (currentView.DataContext is SelectDiskViewModel selectDiskVM)
                     {
-                        // 선택한 Disk가 MBR인지 확인
-                        views.Push(CurrentView);
-                        CurrentView = new ScanPartitionWindow(selectDiskVM.SelectDisk);
-                        state = ViewState.SelectPartition;
+                        // 선택한 Disk가 MBR인지 확인?
+
+                        if (selectDiskVM.SelectedDisk == null)
+                            MessageBox.Show("디스크를 선택해주세요");
+                        else
+                        {
+                            views.Push(CurrentView);
+                            CurrentView = new ScanPartitionWindow(selectDiskVM.SelectedDisk);
+                            State = ViewState.SelectPartition;
+
+                        }
                     }
                     break;
 
                 case ViewState.SelectPartition:
-                    if(currentView.DataContext is ScanPartitionViewModel scanPartitionVM)
+                    if (currentView.DataContext is ScanPartitionViewModel scanPartitionVM)
                     {
-                        views.Push(CurrentView);
-                        CurrentView = new RecordView(scanPartitionVM.SelectParttition);
-                        state = ViewState.ViewRecord;
+                        if (scanPartitionVM.SelectedPartition == null)
+                            MessageBox.Show("스캔할 파티션을 선택해주세요");
+                        else
+                        {
+                            views.Push(CurrentView);
+                            CurrentView = new RecordView(scanPartitionVM.SelectedPartition);
+                            State = ViewState.ViewRecord;
+                        }
                     }
                     break;
             }
@@ -76,15 +97,15 @@ namespace LikeNtfsWalker.ViewModel
 
         private void GotoPrevious(object parameter)
         {
-            switch (state)
+            switch (State)
             {
                 case ViewState.SelectPartition:
                     CurrentView = views.Pop();
-                    state = ViewState.SelectDrive;
+                    State = ViewState.SelectDrive;
                     break;
                 case ViewState.ViewRecord:
                     CurrentView = views.Pop();
-                    state = ViewState.SelectPartition;
+                    State = ViewState.SelectPartition;
                     break;
             }
         }

@@ -32,8 +32,28 @@
                 <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Back" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="1" Command="{Binding GotoPrevCommand}"/>
-            <Button Content="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="3" Command="{Binding GotoNextCommand}"/>
+            <Button Content="Back" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="1" Command="{Binding GotoPrevCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}"  Value="{x:Static local:ViewState.SelectDrive}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Next" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="3" Command="{Binding GotoNextCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}"  Value="{x:Static local:ViewState.ViewRecord}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="Exit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="5"  Command="{Binding ExitCommand}"/>
         </Grid>
     </Grid>

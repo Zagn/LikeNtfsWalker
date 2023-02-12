@@ -31,14 +31,14 @@
             <TabControl Grid.Column="0">
                 <TabItem Header="MFT Records">
                     <Grid Background="#FFE5E5E5">
-                        <ListView ItemsSource="{Binding RecordList}">
+                        <ListView ItemsSource="{Binding RecordList}" SelectedItem="{Binding SelectedRecord}">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="MFT #" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                                    <GridViewColumn Header="MFT #" Width="50" DisplayMemberBinding="{Binding MftNumber}"/>
                                     <GridViewColumn Header="File name" Width="100" DisplayMemberBinding="{Binding FileName}"/>
                                     <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"/>
-                                    <GridViewColumn Header="Date created" Width="100" DisplayMemberBinding="{Binding CDate}"/>
-                                    <GridViewColumn Header="Date modified" Width="100" DisplayMemberBinding="{Binding MDate}"/>
+                                    <GridViewColumn Header="Date created" Width="100" DisplayMemberBinding="{Binding CreateDate}"/>
+                                    <GridViewColumn Header="Date modified" Width="100" DisplayMemberBinding="{Binding ModifiedDate}"/>
                                     <GridViewColumn Header="Attributes" Width="100" DisplayMemberBinding="{Binding Attributes}"/>
                                 </GridView>
                             </ListView.View>
@@ -50,15 +50,42 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            
+
             <TabControl  Grid.Column="2">
                 <TabItem Header="File imformation">
-                    <Grid Background="#FFE5E5E5">
-                        <ListView ItemsSource="{Binding Fileinfolist}">
-                            <ListView.View>
-                                <GridView>
-                                </GridView>
-                            </ListView.View>
+                    <Grid >
+                        <ListView ItemsSource="{Binding SelectedRecord.FileInfoList}" >
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="{Binding Title}" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                                        <ListView ItemsSource="{Binding Properties}"  Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                                  BorderThickness="0">
+                                            <ListView.Resources>
+                                                <Style TargetType="GridViewColumnHeader">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Style>
+                                            </ListView.Resources>
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding Key}"></GridViewColumn>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding Value}"></GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
                 </TabItem>

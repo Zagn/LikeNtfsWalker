@@ -6,9 +6,9 @@ namespace LikeNtfsWalker.ViewModel
 {
     public class RecordViewModel : Notifier
     {
-        private ObservableCollection<Record> recordslist;
+        private ObservableCollection<MftRecord> recordslist;
 
-        public ObservableCollection<Record> RecordList
+        public ObservableCollection<MftRecord> RecordList
         {
             get => recordslist;
             set
@@ -18,37 +18,34 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        private ObservableCollection<Record> fileinfolist;
+        private MftRecord selectedrecord;
 
-        public ObservableCollection<Record> Fileinfolist
+        public MftRecord SelectedRecord
         {
-            get => fileinfolist;
+            get => selectedrecord;
             set
             {
-                fileinfolist = value;
+                selectedrecord = value;
                 RaisePropertyChanged();
             }
         }
 
         public Command SaveCommand { get; set; }
 
-        public RecordViewModel(Scan scan)
+        public RecordViewModel(Partition scan)
         {
-            recordslist = new ObservableCollection<Record>();
-            fileinfolist = new ObservableCollection<Record>();
+            recordslist = new ObservableCollection<MftRecord>();
             SaveCommand = new Command(Savefile);
         }
 
         public void Savefile(object parameter)
         {
-            RecordList.Add(new Record("1", "2", "3", "4", "5", "6", "7", "8"));
-
             // 선택한 정보를 저장
-           /* var dialog = new System.Windows.Forms.SaveFileDialog();
+            var dialog = new System.Windows.Forms.SaveFileDialog();
 
             dialog.CheckPathExists = true;
 
-            dialog.ShowDialog();*/
+            dialog.ShowDialog();
         }
     }
 }
