@@ -1,4 +1,5 @@
-﻿using LikeNtfsWalker.UI;
+﻿using Filesystem.Ntfs;
+using LikeNtfsWalker.UI;
 
 namespace LikeNtfsWalker.Model
 {
@@ -29,10 +30,23 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Scan(string name, string fileSystem)
+        private NTFSFileSystem ntfsFileSystem;
+
+        public NTFSFileSystem NtfsFileSystem
+        {
+            get => NtfsFileSystem;
+            set
+            {
+                NtfsFileSystem = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Scan(string name, string fileSystem, NTFSFileSystem ntfsFileSystem)
         {
             this.name = name;
             this.fileSystem = fileSystem;
+            this.ntfsFileSystem = ntfsFileSystem;
         }
     }
 }
