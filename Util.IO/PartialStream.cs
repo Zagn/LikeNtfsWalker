@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Util.IO
 {
-    internal class PartialStream : Stream
+    public class PartialStream : Stream
     {
         private List<Extent> Extents;
 
@@ -52,6 +52,7 @@ namespace Util.IO
                     realPos = Extents[i + 1].Start;
                 i++;
             }
+            Seek(totalSize, SeekOrigin.Current);  
 
             return totalSize;
         }
@@ -68,7 +69,7 @@ namespace Util.IO
                 prevSize += Extents[i].Size;
             }
 
-            return null;
+            throw new ArgumentOutOfRangeException();
         }
 
         public override long Seek(long offset, SeekOrigin origin)

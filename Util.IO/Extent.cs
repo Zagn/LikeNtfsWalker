@@ -1,6 +1,6 @@
 ﻿namespace Util.IO
 {
-    internal class Extent
+    public class Extent
     {
         public long Start { get; set; }
         public long Size { get; set; }

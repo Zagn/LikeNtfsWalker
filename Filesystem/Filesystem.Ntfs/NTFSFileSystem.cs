@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Filesystem.Ntfs
 {
@@ -17,14 +13,25 @@ namespace Filesystem.Ntfs
         public NTFSFileSystem(Stream stream)
         {
             Stream = stream;
-            BuildFilesystem();
+            MftEntries = new List<MftEntry>();
         }
 
         public void BuildFilesystem()
         {
             vbr = new VBR(Stream);
-            Stream.Position = (long)vbr.MftStartOffset;
-            mfth = new MFTEntryHeader(Stream);
+
+            Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
+            var mft = new MftEntry(Stream, vbr.ClusterSize); // $MFT
+
+            var padding = 0L;
+            while (mft.DataStream.Position < mft.DataStream.Length)
+            {
+                MftEntries.Add(new MftEntry(mft.DataStream, vbr.ClusterSize));
+               
+                if (mft.DataStream.Position % 4 != 0)
+                    padding = 4 - mft.DataStream.Position % 4;
+                mft.DataStream.Seek(padding, SeekOrigin.Current);
+            }
         }
 
         ~NTFSFileSystem()
