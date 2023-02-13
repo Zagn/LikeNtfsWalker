@@ -11,7 +11,7 @@ namespace Filesystem.Ntfs
     internal class MftEntry
     {
         public MFTEntryHeader Header { get; }
-        public Dictionary<AttType, MftAttribute> Attributes { get; }
+        public Dictionary<AttType, MftAttribute> Attributes = new Dictionary<AttType, MftAttribute>();
         public Stream DataStream { get; }
         
 
@@ -19,8 +19,13 @@ namespace Filesystem.Ntfs
         {
             Header = new MFTEntryHeader(stream);
 
+            var FixupArraySignature = 2;
+            var FixupArray = 2;
+            stream.Seek(FixupArraySignature + Header.CountOfFixupValues * FixupArray , SeekOrigin.Current);
+
             var pos = stream.Position;
-            while (pos < Header.UsedSizeofMFTEntry)
+            var MFTEntrySize = Header.UsedSizeofMFTEntry + pos;
+            while (pos < MFTEntrySize)
             {
                 // Non-Resident Flag 값을 먼저 확인
                 // 그에 따라 NonResidentHeader or ResidentHeader 생성

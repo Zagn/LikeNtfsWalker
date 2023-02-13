@@ -10,6 +10,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(short)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToInt16(buffer, 0);
         }
@@ -17,6 +18,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(ushort)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToUInt16(buffer, 0);
         }
@@ -25,6 +27,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(int)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToInt32(buffer, 0);
         }
@@ -33,6 +36,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(uint)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToUInt32(buffer, 0);
         }
@@ -40,6 +44,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(long)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToInt64(buffer, 0);
         }
@@ -48,6 +53,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[sizeof(ulong)];
             stream.Read(buffer, 0, Math.Min(size, buffer.Length));
+            
 
             return BitConverter.ToUInt64(buffer, 0);
         }
@@ -56,6 +62,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[length];
             stream.Read(buffer, 0, length);
+            
 
             return Encoding.UTF8.GetString(buffer);
         }
@@ -63,6 +70,7 @@ namespace Util.IO
         {
             byte[] buffer = new byte[length];
             stream.Read(buffer, 0, (int)length);
+            
 
             return buffer;
         }
