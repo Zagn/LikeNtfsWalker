@@ -10,12 +10,12 @@ namespace Filesystem.Ntfs
 {
     public class VolumeLable
     {
-        public static string FromNtfs(Stream stream)
+        public static string FromNtfs(Stream stream, int clusterSize)
         {
             stream.Seek(512 * 3 * 2, SeekOrigin.Current); //location of $Volume
             var mftStartPos = stream.Position;
 
-            MftEntry mftEntry = new MftEntry(stream);
+            MftEntry mftEntry = new MftEntry(stream, clusterSize);
 
             stream.Position = mftStartPos;
             stream.Position += mftEntry.Header.OffsetToFirstAttribute; //location of First Attribute 
