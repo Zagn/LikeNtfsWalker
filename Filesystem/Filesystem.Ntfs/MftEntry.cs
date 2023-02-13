@@ -18,6 +18,7 @@ namespace Filesystem.Ntfs
         public MftEntry(Stream stream, int clusterSize)
         {
             Header = new MFTEntryHeader(stream);
+            
 
             var FixupArraySignature = 2;
             var FixupArray = 2;
@@ -59,6 +60,7 @@ namespace Filesystem.Ntfs
                         stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
                         break;
                 }
+                pos = attDataStream.Position;
             }
         }
         

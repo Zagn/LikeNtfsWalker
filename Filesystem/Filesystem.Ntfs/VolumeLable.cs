@@ -35,7 +35,7 @@ namespace Filesystem.Ntfs
                     var offsetOfCont = stream.ReadUInt16();
                     stream.Position = attrStartPos + offsetOfCont;
 
-                    return stream.ReadString(sizeOfCont);
+                    return stream.ReadString(sizeOfCont).Replace("\0", "");
                 }
                 else
                 {
