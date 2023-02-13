@@ -22,7 +22,6 @@ namespace Filesystem.Ntfs
 
             Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
             var mft = new MftEntry(Stream, vbr.ClusterSize); // $MFT
-
             var padding = 0L;
             while (mft.DataStream.Position < mft.DataStream.Length)
             {

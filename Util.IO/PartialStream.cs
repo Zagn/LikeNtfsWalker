@@ -52,7 +52,7 @@ namespace Util.IO
                     realPos = Extents[i + 1].Start;
                 i++;
             }
-            Seek(totalSize, SeekOrigin.Current);  
+            Seek(totalSize, SeekOrigin.Current);
 
             return totalSize;
         }
