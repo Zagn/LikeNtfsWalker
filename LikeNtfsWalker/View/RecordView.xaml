@@ -94,6 +94,7 @@
                 </TabItem>
                 <TabItem Header="HexData">
                     <Grid Background="#FFE5E5E5"/>
+                    
                 </TabItem>
             </TabControl>
         </Grid>
