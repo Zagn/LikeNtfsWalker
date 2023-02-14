@@ -1,4 +1,5 @@
-﻿using LikeNtfsWalker.UI;
+﻿using Filesystem.Partition;
+using LikeNtfsWalker.UI;
 using LikeNtfsWalker.View;
 using System.Collections.Generic;
 using System.Windows;
@@ -65,16 +66,17 @@ namespace LikeNtfsWalker.ViewModel
                 case ViewState.SelectDrive:
                     if (currentView.DataContext is SelectDiskViewModel selectDiskVM)
                     {
-                        // 선택한 Disk가 MBR인지 확인?
-
                         if (selectDiskVM.SelectedDisk == null)
                             MessageBox.Show("디스크를 선택해주세요");
+                        else if (IsMbr(selectDiskVM.SelectedDisk.FilePath) == false)
+                        {
+                            MessageBox.Show("파일 형식을 확인해주세요");
+                        }
                         else
                         {
                             views.Push(CurrentView);
                             CurrentView = new ScanPartitionWindow(selectDiskVM.SelectedDisk);
                             State = ViewState.SelectPartition;
-
                         }
                     }
                     break;
@@ -113,6 +115,14 @@ namespace LikeNtfsWalker.ViewModel
         private void Exit(object parameter)
         {
             Application.Current.MainWindow.Close();
+        }
+
+        private bool IsMbr(string filePath)
+        {
+            Mbr mbr = new Mbr(filePath);
+
+            if (mbr.isMbr == true) return true; 
+            else return false; 
         }
     }
 }

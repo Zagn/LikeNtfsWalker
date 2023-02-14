@@ -17,16 +17,18 @@ namespace Filesystem.Ntfs
 
         public MftEntry(Stream stream, int clusterSize)
         {
+            var mftentrystartpos = stream.Position;
+            var endmarkersize = 8;
+
             Header = new MFTEntryHeader(stream);
-            
+            var MFTEntrySize = Header.UsedSizeofMFTEntry + mftentrystartpos;
 
             var FixupArraySignature = 2;
             var FixupArray = 2;
             stream.Seek(FixupArraySignature + Header.CountOfFixupValues * FixupArray , SeekOrigin.Current);
 
             var pos = stream.Position;
-            var MFTEntrySize = Header.UsedSizeofMFTEntry + pos;
-            while (pos < MFTEntrySize)
+            while (pos < MFTEntrySize - endmarkersize)
             {
                 // Non-Resident Flag 값을 먼저 확인
                 // 그에 따라 NonResidentHeader or ResidentHeader 생성
@@ -34,7 +36,7 @@ namespace Filesystem.Ntfs
 
                 stream.Seek(8, SeekOrigin.Current);
                 var isNonResident = stream.ReadBool();
-                var attOffset = stream.Seek(-9, SeekOrigin.Current);
+                var attOffset = stream.Seek(-10, SeekOrigin.Current);
                 var header = isNonResident ? (MftAttHeader)new NonResidentHeader(stream) : new ResidentHeader(stream);
                 var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : stream;
 
@@ -60,8 +62,11 @@ namespace Filesystem.Ntfs
                         stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
                         break;
                 }
-                pos = attDataStream.Position;
+                pos = attOffset;
             }
+
+            var paddingMftentry = 1024 - Header.UsedSizeofMFTEntry + endmarkersize;
+            stream.Seek(paddingMftentry, SeekOrigin.Current);
         }
         
         

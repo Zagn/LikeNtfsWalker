@@ -32,10 +32,15 @@ namespace LikeNtfsWalker.ViewModel
 
         public Command SaveCommand { get; set; }
 
-        public RecordViewModel(Partition scan)
+        public RecordViewModel(Partition partition)
         {
             recordslist = new ObservableCollection<MftRecord>();
             SaveCommand = new Command(Savefile);
+
+            partition.NtfsFileSystem.BuildFilesystem();
+
+
+            
         }
 
         public void Savefile(object parameter)

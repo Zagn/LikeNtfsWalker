@@ -130,8 +130,8 @@ namespace Filesystem.Ntfs
             {
                 byte ClusterrunHeader = (byte)stream.ReadByte();
 
-                int RunLengthSize = ClusterrunHeader >> 4;
-                int RunOffsetSize = ClusterrunHeader & 0x0F;
+                int RunOffsetSize = ClusterrunHeader >> 4;
+                int RunLengthSize = ClusterrunHeader & 0x0F;
 
                 var RunLength = stream.ReadUInt64(RunLengthSize);
                 var RunOffset = stream.ReadInt64(RunOffsetSize);
