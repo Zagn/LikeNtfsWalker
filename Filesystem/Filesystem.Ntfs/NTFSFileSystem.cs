@@ -8,7 +8,7 @@ namespace Filesystem.Ntfs
         public Stream Stream;
         public VBR vbr;
         public MFTEntryHeader mfth;
-        
+
         internal List<MftEntry> MftEntries;
 
         public NTFSFileSystem(Stream stream)
@@ -16,13 +16,6 @@ namespace Filesystem.Ntfs
             Stream = stream;
             MftEntries = new List<MftEntry>();
             vbr = new VBR(Stream);
-        }
-
-        public string getVolumeLable()
-        {
-            Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
-            return VolumeLable.FromNtfs(Stream, vbr.ClusterSize);
-
         }
 
         public void BuildFilesystem()

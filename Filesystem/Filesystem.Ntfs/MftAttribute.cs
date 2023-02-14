@@ -129,6 +129,11 @@ namespace Filesystem.Ntfs
             while (i < RunlistLength)
             {
                 byte ClusterrunHeader = (byte)stream.ReadByte();
+                if (ClusterrunHeader == 0x00)
+                {
+                    stream.Seek(RunlistLength - (i + 1), SeekOrigin.Current);
+                    break;
+                }
 
                 int RunOffsetSize = ClusterrunHeader >> 4;
                 int RunLengthSize = ClusterrunHeader & 0x0F;
@@ -136,14 +141,13 @@ namespace Filesystem.Ntfs
                 var RunLength = stream.ReadUInt64(RunLengthSize);
                 var RunOffset = stream.ReadInt64(RunOffsetSize);
 
-                i += 1 + RunLengthSize + RunOffsetSize;
+                i +=  1 + RunLengthSize + RunOffsetSize;
 
                 ClusterRuns.Add(new ClusterRun(RunLength, RunOffset));
-                if (ClusterrunHeader == 0x00)
-                    break;
+
             }
 
-            stream.Seek(RunlistLength - i, SeekOrigin.Current);
+            
 
         }
     }
