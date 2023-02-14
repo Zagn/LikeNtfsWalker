@@ -36,7 +36,7 @@ namespace Filesystem.Ntfs
 
                 stream.Seek(8, SeekOrigin.Current);
                 var isNonResident = stream.ReadBool();
-                var attOffset = stream.Seek(-9, SeekOrigin.Current);
+                var attOffset = stream.Seek(-10, SeekOrigin.Current);
                 var header = isNonResident ? (MftAttHeader)new NonResidentHeader(stream) : new ResidentHeader(stream);
                 var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : stream;
 
