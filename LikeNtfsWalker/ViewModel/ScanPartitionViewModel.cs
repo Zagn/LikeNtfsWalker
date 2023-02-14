@@ -37,7 +37,7 @@ namespace LikeNtfsWalker.ViewModel
                     stream.Position = (long)partition.StartingLBAAddr * 512;
 
                     NTFSFileSystem ntfsFileSystem = new NTFSFileSystem(stream);
-                    Partitions.Add(new Model.Partition(ntfsFileSystem.getVolumeLable(), GetPartitionType(partition.PartitionType), ntfsFileSystem));
+                    Partitions.Add(new Model.Partition("test", GetPartitionType(partition.PartitionType), ntfsFileSystem));
                 }
             }
             catch

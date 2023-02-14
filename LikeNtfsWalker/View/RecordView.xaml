@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LikeNtfsWalker.ViewModel"
+        xmlns:de="clr-namespace:System.ComponentModel.Design;assembly=System.Design"
         mc:Ignorable="d"
-        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DataContext="{d:DesignInstance Type=local:RecordViewModel}">
+        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DataContext="{d:DesignInstance Type=local:RecordViewModel}" x:Name="UserControl">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -93,8 +94,11 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
                 <TabItem Header="HexData">
-                    <Grid Background="#FFE5E5E5"/>
-                    
+                    <Grid Background="#FFE5E5E5">
+                        <WindowsFormsHost>
+                            <de:ByteViewer x:Name="HexViewer"/>
+                        </WindowsFormsHost>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
