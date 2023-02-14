@@ -8,7 +8,8 @@ namespace Filesystem.Partition
     {
         public const short SIG_OFFSET = 510;
         public short PART_START_OFFSET = 446;
-
+        public bool isMbr;
+        
         bool isLittle;
         long isPartitionNull;
 
@@ -38,9 +39,14 @@ namespace Filesystem.Partition
                 Array.Reverse(buffToSig);
             }
 
-            signature = BitConverter.ToUInt16(buffToSig, 0);
-
-            
+            signature = BitConverter.ToUInt16(buffToSig, 0); //isMbr
+            if (signature == 21930)
+            {
+                isMbr = true;
+            } else
+            {
+                isMbr = false;
+            }
 
             for (int i = 0; i < 4; i++)
             {

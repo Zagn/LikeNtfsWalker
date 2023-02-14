@@ -34,10 +34,10 @@ namespace LikeNtfsWalker.Model
 
         public NTFSFileSystem NtfsFileSystem
         {
-            get => NtfsFileSystem;
+            get => ntfsFileSystem;
             set
             {
-                NtfsFileSystem = value;
+                ntfsFileSystem = value;
                 RaisePropertyChanged();
             }
         }
