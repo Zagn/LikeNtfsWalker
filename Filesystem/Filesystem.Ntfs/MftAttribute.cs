@@ -13,17 +13,17 @@ namespace Filesystem.Ntfs
     public enum AttType
     {
         Unknown,
-        SIA = 0x10,
+        SIA = 16,
         AttributeList = 0x20,
-        FileName = 0x30,
+        FileName = 48,
         ObjectID = 0x40,
         SecurityDescriptor = 0x50,
-        VolumeName = 0x60,
+        VolumeName = 96,
         VolumeInformation = 0x70,
-        Data = 0x80,
+        Data = 128,
         IndexRoot = 0x90,
         IndexAllocation = 0xA0,
-        Bitmap = 0xB0,
+        Bitmap = 176,
         SymbolicLink = 0xC0,
         EA_Information = 0xD0,
         EA = 0xE0,
@@ -32,7 +32,7 @@ namespace Filesystem.Ntfs
 
     internal class MftAttribute
     {
-        public MftAttHeader Header { get; set; }
+        public MftAttHeader Header { get; }
         public AttType Type => Header.Type;
 
         public MftAttribute(MftAttHeader header)
@@ -61,7 +61,7 @@ namespace Filesystem.Ntfs
             //    t = (AttType)value;
 
             Type = AttType.Unknown;
-            var value = 0x10;
+            var value = stream.ReadInt32();
             if (Enum.IsDefined(typeof(AttType), value))
                 Type = (AttType)value;
 
@@ -101,7 +101,8 @@ namespace Filesystem.Ntfs
         public ulong ContentAllocSize { get; }
         public ulong ContentActureSize { get; }
         public ulong ContentInitSize { get; }
-        public List<ClusterRun> ClusterRuns { get; }
+
+        public List<ClusterRun> ClusterRuns = new List<ClusterRun>();
 
         public NonResidentHeader(Stream stream) : base(stream)
         {
@@ -175,15 +176,11 @@ namespace Filesystem.Ntfs
         public ulong UpdateSequenceNumber { get; }
 
         public StandardInformation(MftAttHeader header, Stream stream) : base(header)
-        {
-            var regidentHeader = (ResidentHeader)header;
-            var AttHeader = regidentHeader.AttLength - regidentHeader.SizeOfContent;
-            stream.Seek(AttHeader, SeekOrigin.Current);
-
+        {          
             CreationTime = stream.ReadUInt64();
             ModifiedTime = stream.ReadUInt64();
-            MFTModifiedTime = stream.ReadUInt16();
-            LastAccessedTime = stream.ReadUInt16();
+            MFTModifiedTime = stream.ReadUInt64();
+            LastAccessedTime = stream.ReadUInt64();
             Flags = stream.ReadUInt32();
             MaximumNumberOfVersions = stream.ReadUInt32();
             VersionNumber = stream.ReadUInt32();
@@ -192,6 +189,7 @@ namespace Filesystem.Ntfs
             SecurityID = stream.ReadUInt32();
             QuotaCharged = stream.ReadUInt64();
             UpdateSequenceNumber = stream.ReadUInt64();
+
         }
     }
 
@@ -211,9 +209,10 @@ namespace Filesystem.Ntfs
         public string Name { get; }
         public FileName(MftAttHeader header, Stream stream) : base(header)
         {
-            var regidentHeader = (ResidentHeader)header;
-            var AttHeader = regidentHeader.AttLength - regidentHeader.SizeOfContent;
-            stream.Seek(AttHeader, SeekOrigin.Current);
+            stream.Seek(-24, SeekOrigin.Current);
+            var filenamestartoffset = stream.Position;
+            var s = filenamestartoffset + header.AttLength; //
+            stream.Seek(24, SeekOrigin.Current);
 
             FileReferenceOfParentDirectory = stream.ReadUInt64();
 
@@ -228,15 +227,21 @@ namespace Filesystem.Ntfs
             AllocatedSizeOfFile = stream.ReadUInt64();
 
             RealSizeOfFile = stream.ReadUInt64();
+
             Flags = stream.ReadUInt32();
 
             ReparseValue = stream.ReadUInt32();
 
             LengthOfName = stream.ReadUInt16(1);
+            var RealLengthOfName = LengthOfName * 2;
 
             Namespace = stream.ReadUInt16(1);
+                   
+            Name = stream.ReadString(RealLengthOfName);
 
-            Name = stream.ReadString(LengthOfName);
+            var pos = stream.Position;
+            var FileNamePadding = s - pos;
+            stream.Seek(FileNamePadding, SeekOrigin.Current);
         }
     }
 
@@ -247,8 +252,13 @@ namespace Filesystem.Ntfs
 
         public Bitmap(MftAttHeader header, Stream stream) : base(header)
         {
+            if (header.NonResidentFlag == 1)
+                return;
+
             var regidentHeader = (ResidentHeader)header;
-            BitFiled = stream.ReadBytes(regidentHeader.SizeOfContent);
+
+            BitFiled = new byte[regidentHeader.SizeOfContent];
+            stream.Read(BitFiled, 0, BitFiled.Length);
         }
     }
 
@@ -258,8 +268,13 @@ namespace Filesystem.Ntfs
 
         public VolumeName(MftAttHeader header, Stream stream) : base(header)
         {
+            if (header.NonResidentFlag == 1)
+                return;
+
             var regidentHeader = (ResidentHeader)header;
-            UnicodeName = stream.ReadBytes(regidentHeader.SizeOfContent);
+
+            UnicodeName = new byte[regidentHeader.SizeOfContent];
+            stream.Read(UnicodeName, 0, UnicodeName.Length);
         }
     }
 
@@ -276,10 +291,10 @@ namespace Filesystem.Ntfs
 
             // Resident 이면 Data에 값 입력
             var regidentHeader = (ResidentHeader)header;
-            Data = stream.ReadBytes(regidentHeader.SizeOfContent);
+            //Data = stream.ReadBytes(regidentHeader.SizeOfContent);
 
-            //Data = new byte[regidentHeader.SizeOfContent];
-            //stream.Read(Data, 0, Data.Length);
+            Data = new byte[regidentHeader.SizeOfContent];
+            stream.Read(Data, 0, Data.Length);
         }
     }
 }

@@ -67,8 +67,8 @@ namespace Filesystem.Ntfs
             stream.Seek(426, SeekOrigin.Current);
             Signature = stream.ReadUInt16();
 
-            ClusterSize = (uint)BytesPerSector * SectorsPerCluster;
-            MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT);
+            ClusterSize = BytesPerSector * SectorsPerCluster;
+            MftStartOffset = ((ulong)ClusterSize * LogicalClusterNumberForTheFileMFT + ((ulong)stream.Position) - 512);
         }
     }
 }
