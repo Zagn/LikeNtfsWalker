@@ -121,7 +121,7 @@ namespace Util.IO
             var buffer = new byte[1];
             Read(buffer, 0, buffer.Length);
 
-            Position += 1;
+            //Position += 1;
 
             return buffer[0];
         }

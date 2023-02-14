@@ -32,7 +32,7 @@ namespace Filesystem.Ntfs
             var mft = new MftEntry(Stream, vbr.ClusterSize); // $MFT
             var padding = 0L;
 
-            while (mft.DataStream.Position < mft.DataStream.Length) //mft.DataStream is null
+            while (mft.DataStream.Position < mft.DataStream.Length) //mft.DataStram is null
             {
                 MftEntries.Add(new MftEntry(mft.DataStream, vbr.ClusterSize));
                
