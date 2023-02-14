@@ -52,5 +52,6 @@ namespace LikeNtfsWalker.ViewModel
 
             dialog.ShowDialog();
         }
+
     }
 }
