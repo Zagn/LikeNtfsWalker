@@ -68,7 +68,7 @@ namespace Filesystem.Ntfs
             Signature = stream.ReadUInt16();
 
             ClusterSize = (uint)BytesPerSector * SectorsPerCluster;
-            MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT;
+            MftStartOffset = (ClusterSize * LogicalClusterNumberForTheFileMFT);
         }
     }
 }
