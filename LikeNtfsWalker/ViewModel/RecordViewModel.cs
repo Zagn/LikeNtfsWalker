@@ -36,11 +36,7 @@ namespace LikeNtfsWalker.ViewModel
         {
             recordslist = new ObservableCollection<MftRecord>();
             SaveCommand = new Command(Savefile);
-
-            partition.NtfsFileSystem.BuildFilesystem();
-
-
-            
+   
         }
 
         public void Savefile(object parameter)

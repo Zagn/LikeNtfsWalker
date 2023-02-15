@@ -46,6 +46,7 @@
     <Compile Include="Mbr.cs" />
     <Compile Include="Partition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VolumeLable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mbr\" />

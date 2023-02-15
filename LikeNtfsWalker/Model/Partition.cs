@@ -1,5 +1,6 @@
 ﻿using Filesystem.Ntfs;
 using LikeNtfsWalker.UI;
+using Util.IO;
 
 namespace LikeNtfsWalker.Model
 {
@@ -30,23 +31,23 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        private NTFSFileSystem ntfsFileSystem;
+        private PartialStream partialStream;
 
-        public NTFSFileSystem NtfsFileSystem
+        public PartialStream PartialStream
         {
-            get => ntfsFileSystem;
+            get => partialStream;
             set
             {
-                ntfsFileSystem = value;
+                partialStream = value;
                 RaisePropertyChanged();
             }
         }
 
-        public Partition(string name, string fileSystem, NTFSFileSystem ntfsFileSystem)
+        public Partition(string name, string fileSystem, PartialStream partialStream)
         {
             this.name = name;
             this.fileSystem = fileSystem;
-            this.ntfsFileSystem = ntfsFileSystem;
+            this.partialStream = partialStream;
         }
     }
 }

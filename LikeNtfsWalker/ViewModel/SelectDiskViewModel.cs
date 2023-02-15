@@ -78,7 +78,12 @@ namespace LikeNtfsWalker.ViewModel
                 foreach (ManagementObject d in driveQuery.Get())
                 {
                     Filesystem.Partition.Disk disk = new Filesystem.Partition.Disk(d);
-                    disks.Add(new Disk(disk.driveName + "\\ ", disk.diskModel + " ", Convert.ToString(Math.Round((double)disk.totalSpace / (1024 * 1024 * 1024), 1)) + "GB", disk.fileSystem + " ", disk.physicalName));
+                    disks.Add(
+                        new Disk(disk.driveName + "\\ ", disk.diskModel + " "
+                        , Convert.ToString(Math.Round((double)disk.totalSpace / (1024 * 1024 * 1024), 1)) + "GB"
+                        , disk.fileSystem + " "
+                        , disk.physicalName)
+                        );
                 }
 
                 return disks;

@@ -3,6 +3,7 @@ using Filesystem.Partition;
 using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Documents;
 using Util.IO;
 
 namespace LikeNtfsWalker.ViewModel
@@ -29,20 +30,24 @@ namespace LikeNtfsWalker.ViewModel
 
             try
             {
-                Mbr mbr = new Mbr(disk.FilePath);
-                DeviceStream stream = new DeviceStream(disk.FilePath, 512);
+                var mbr = new Mbr(disk.FilePath);
+
+                var stream = new DeviceStream(disk.FilePath, 512);
+
+                var partialStream = new PartialStream(stream); //이거 변경해야함
 
                 foreach (var partition in mbr.partitions)
                 {
-                    stream.Position = (long)partition.StartingLBAAddr * 512;
+                    
+                    Extent extent = new Extent((long)partition.StartingLBAAddr * 512, (long)partition.SizeInSector * 512);
+                    partialStream.AddExtent(extent);
 
-                    NTFSFileSystem ntfsFileSystem = new NTFSFileSystem(stream);
-                    Partitions.Add(new Model.Partition(ntfsFileSystem.getVolumeLable(), GetPartitionType(partition.PartitionType), ntfsFileSystem));
+                    Partitions.Add(new Model.Partition(VolumeLable.FromNtfs(partialStream), GetPartitionType(partition.PartitionType), partialStream));
                 }
             }
             catch
             {
-                MessageBox.Show("파티션 테이블이 MBR이 아닙니다.");
+                MessageBox.Show("Error Occur : \"ScanPartitionViewModel()\"");
             }
         }
 

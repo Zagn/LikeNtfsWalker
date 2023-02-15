@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VolumeLable.cs" />
     <Compile Include="MftAttribute.cs" />
     <Compile Include="MftEntry.cs" />
     <Compile Include="MFTEntryHeader.cs" />

@@ -18,13 +18,6 @@ namespace Filesystem.Ntfs
             vbr = new VBR(Stream);
         }
 
-        public string getVolumeLable()
-        {
-            Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
-            return VolumeLable.FromNtfs(Stream, vbr.ClusterSize);
-
-        }
-
         public void BuildFilesystem()
         {
             Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
@@ -46,5 +39,7 @@ namespace Filesystem.Ntfs
         {
             //Stream.Close();
         }
+
+        
     }
 }
