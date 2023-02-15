@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using Util.IO;
 
 namespace Filesystem.Ntfs
@@ -11,7 +7,7 @@ namespace Filesystem.Ntfs
     internal class MftEntry
     {
         public MFTEntryHeader Header { get; }
-        public Dictionary<AttType, MftAttribute> Attributes = new Dictionary<AttType, MftAttribute>();
+        public List<MftAttribute> Attributes = new List<MftAttribute>();
         public Stream DataStream { get; }
         
 
@@ -22,6 +18,12 @@ namespace Filesystem.Ntfs
 
             Header = new MFTEntryHeader(stream);
             var MFTEntrySize = Header.UsedSizeofMFTEntry + mftentrystartpos;
+
+            if (Header.Signature != "FILE")
+            {
+                stream.Seek(976, SeekOrigin.Current);
+                return;
+            }
 
             var FixupArraySignature = 2;
             var FixupArray = 2;
@@ -43,26 +45,27 @@ namespace Filesystem.Ntfs
                 switch (header.Type)
                 {
                     case AttType.SIA:
-                        Attributes.Add(AttType.SIA, new StandardInformation(header, attDataStream));
+                        Attributes.Add(new StandardInformation(header, attDataStream));
                         break;
                     case AttType.FileName:
-                        Attributes.Add(AttType.FileName, new FileName(header, attDataStream));
+                        Attributes.Add(new FileName(header, attDataStream));
                         break;
                     case AttType.Data:
                         DataStream = attDataStream;
-                        Attributes.Add(AttType.Data, new DataAttribute(header, attDataStream));
+                        Attributes.Add(new DataAttribute(header, attDataStream));
                         break;
                     case AttType.Bitmap:
-                        Attributes.Add(AttType.Bitmap, new Bitmap(header, attDataStream));
+                        Attributes.Add(new Bitmap(header, attDataStream));
                         break;
                     case AttType.VolumeName:
-                        Attributes.Add(AttType.VolumeName, new VolumeName(header, attDataStream));
+                        Attributes.Add(new VolumeName(header, attDataStream));
                         break;
                     default:
                         stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
                         break;
                 }
-                pos = stream.Position;
+
+                pos = stream.Seek(pos + header.AttLength, SeekOrigin.Begin);
             }
 
             var paddingMftentry = 1024 - Header.UsedSizeofMFTEntry + endmarkersize;

@@ -43,6 +43,7 @@ namespace LikeNtfsWalker.ViewModel
                     partialStream.AddExtent(extent);
 
                     Partitions.Add(new Model.Partition(VolumeLable.FromNtfs(partialStream), GetPartitionType(partition.PartitionType), partialStream));
+
                 }
             }
             catch

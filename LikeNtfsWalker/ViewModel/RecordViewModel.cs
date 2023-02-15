@@ -1,6 +1,7 @@
 ﻿using LikeNtfsWalker.Model;
 using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
+using System.Windows.Markup;
 
 namespace LikeNtfsWalker.ViewModel
 {
@@ -30,24 +31,39 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
+        private byte[] hexData;
+
+        public byte[] HexData
+        {
+            get => hexData;
+            set
+            {
+                hexData = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Command SaveCommand { get; set; }
 
         public RecordViewModel(Partition partition)
         {
             recordslist = new ObservableCollection<MftRecord>();
             SaveCommand = new Command(Savefile);
-   
+
+            hexData = new byte[] { 1, 2, 3, 4, 5 };
+            partition.NtfsFileSystem.BuildFilesystem();
         }
 
         public void Savefile(object parameter)
         {
-            // 선택한 정보를 저장
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
             dialog.CheckPathExists = true;
 
             dialog.ShowDialog();
         }
+
+            
 
     }
 }

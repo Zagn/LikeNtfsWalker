@@ -52,6 +52,7 @@ namespace Filesystem.Ntfs
         public ushort OffsetToTheName { get; }
         public ushort Flag { get; }
         public ushort AttID { get; }
+        public string Name { get; protected set; }
 
         public MftAttHeader(Stream stream)
         {
@@ -77,17 +78,20 @@ namespace Filesystem.Ntfs
     internal class ResidentHeader : MftAttHeader
     {
         public uint SizeOfContent { get; }
-        public ushort OffsetOfCount { get; }
+        public ushort OffsetOfContent { get; }
         public bool IsIndex { get; }
         public byte Padding { get; }
 
         public ResidentHeader(Stream stream) : base(stream)
         {
             SizeOfContent = stream.ReadUInt32();
-            OffsetOfCount = stream.ReadUInt16();
+            OffsetOfContent = stream.ReadUInt16();
             //IsIndex = buffer[0] == 1;
             IsIndex = stream.ReadBool();
             Padding = (byte)stream.ReadByte();
+
+            if (NameLength > 0)
+                Name = stream.ReadString(NameLength * 2);
         }
     }
 
@@ -129,6 +133,11 @@ namespace Filesystem.Ntfs
             while (i < RunlistLength)
             {
                 byte ClusterrunHeader = (byte)stream.ReadByte();
+                if (ClusterrunHeader == 0x00)
+                {
+                    stream.Seek(RunlistLength - (i + 1), SeekOrigin.Current);
+                    break;
+                }
 
                 int RunOffsetSize = ClusterrunHeader >> 4;
                 int RunLengthSize = ClusterrunHeader & 0x0F;
@@ -136,15 +145,14 @@ namespace Filesystem.Ntfs
                 var RunLength = stream.ReadUInt64(RunLengthSize);
                 var RunOffset = stream.ReadInt64(RunOffsetSize);
 
-                i += 1 + RunLengthSize + RunOffsetSize;
+                i +=  1 + RunLengthSize + RunOffsetSize;
 
                 ClusterRuns.Add(new ClusterRun(RunLength, RunOffset));
-                if (ClusterrunHeader == 0x00)
-                    break;
+
             }
 
-            stream.Seek(RunlistLength - i, SeekOrigin.Current);
-
+            if (NameLength > 0)
+                Name = stream.ReadString(NameLength * 2);
         }
     }
 
@@ -176,7 +184,8 @@ namespace Filesystem.Ntfs
         public ulong UpdateSequenceNumber { get; }
 
         public StandardInformation(MftAttHeader header, Stream stream) : base(header)
-        {          
+        {            
+            // header.AttLength 만큼 읽어야한다 
             CreationTime = stream.ReadUInt64();
             ModifiedTime = stream.ReadUInt64();
             MFTModifiedTime = stream.ReadUInt64();
@@ -185,6 +194,10 @@ namespace Filesystem.Ntfs
             MaximumNumberOfVersions = stream.ReadUInt32();
             VersionNumber = stream.ReadUInt32();
             ClassID = stream.ReadUInt32();
+
+            if (header.AttLength == 0x48)
+                return;
+
             OwnerID = stream.ReadUInt32();
             SecurityID = stream.ReadUInt32();
             QuotaCharged = stream.ReadUInt64();
