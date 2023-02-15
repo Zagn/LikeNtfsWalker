@@ -52,6 +52,7 @@ namespace Filesystem.Ntfs
         public ushort OffsetToTheName { get; }
         public ushort Flag { get; }
         public ushort AttID { get; }
+        public string Name { get; protected set; }
 
         public MftAttHeader(Stream stream)
         {
@@ -77,17 +78,20 @@ namespace Filesystem.Ntfs
     internal class ResidentHeader : MftAttHeader
     {
         public uint SizeOfContent { get; }
-        public ushort OffsetOfCount { get; }
+        public ushort OffsetOfContent { get; }
         public bool IsIndex { get; }
         public byte Padding { get; }
 
         public ResidentHeader(Stream stream) : base(stream)
         {
             SizeOfContent = stream.ReadUInt32();
-            OffsetOfCount = stream.ReadUInt16();
+            OffsetOfContent = stream.ReadUInt16();
             //IsIndex = buffer[0] == 1;
             IsIndex = stream.ReadBool();
             Padding = (byte)stream.ReadByte();
+
+            if (NameLength > 0)
+                Name = stream.ReadString(NameLength * 2);
         }
     }
 
@@ -147,8 +151,8 @@ namespace Filesystem.Ntfs
 
             }
 
-            
-
+            if (NameLength > 0)
+                Name = stream.ReadString(NameLength * 2);
         }
     }
 
@@ -180,7 +184,8 @@ namespace Filesystem.Ntfs
         public ulong UpdateSequenceNumber { get; }
 
         public StandardInformation(MftAttHeader header, Stream stream) : base(header)
-        {          
+        {            
+            // header.AttLength 만큼 읽어야한다 
             CreationTime = stream.ReadUInt64();
             ModifiedTime = stream.ReadUInt64();
             MFTModifiedTime = stream.ReadUInt64();
@@ -189,6 +194,10 @@ namespace Filesystem.Ntfs
             MaximumNumberOfVersions = stream.ReadUInt32();
             VersionNumber = stream.ReadUInt32();
             ClassID = stream.ReadUInt32();
+
+            if (header.AttLength == 0x48)
+                return;
+
             OwnerID = stream.ReadUInt32();
             SecurityID = stream.ReadUInt32();
             QuotaCharged = stream.ReadUInt64();

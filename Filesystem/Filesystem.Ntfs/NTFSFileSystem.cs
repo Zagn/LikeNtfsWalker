@@ -27,6 +27,7 @@ namespace Filesystem.Ntfs
 
             while (mft.DataStream.Position < mft.DataStream.Length) //mft.DataStram is null
             {
+
                 MftEntries.Add(new MftEntry(mft.DataStream, vbr.ClusterSize));
                
                 if (mft.DataStream.Position % 4 != 0)
@@ -37,7 +38,7 @@ namespace Filesystem.Ntfs
 
         ~NTFSFileSystem()
         {
-            //Stream.Close();
+            Stream.Close();
         }
     }
 }
