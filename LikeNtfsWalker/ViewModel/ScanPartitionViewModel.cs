@@ -38,9 +38,8 @@ namespace LikeNtfsWalker.ViewModel
 
                 foreach (var partition in mbr.partitions)
                 {
-                    
                     Extent extent = new Extent((long)partition.StartingLBAAddr * 512, (long)partition.SizeInSector * 512);
-                    partialStream.AddExtent(extent);
+                       
 
                     Partitions.Add(new Model.Partition(VolumeLable.FromNtfs(partialStream), GetPartitionType(partition.PartitionType), partialStream));
 

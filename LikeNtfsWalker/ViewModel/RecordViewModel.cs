@@ -51,7 +51,7 @@ namespace LikeNtfsWalker.ViewModel
             SaveCommand = new Command(Savefile);
 
             hexData = new byte[] { 1, 2, 3, 4, 5 };
-            partition.NtfsFileSystem.BuildFilesystem();
+            
         }
 
         public void Savefile(object parameter)
