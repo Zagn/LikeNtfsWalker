@@ -69,6 +69,8 @@ namespace Filesystem.Ntfs
 
             ClusterSize = BytesPerSector * SectorsPerCluster;
             MftStartOffset = ((ulong)ClusterSize * LogicalClusterNumberForTheFileMFT);
+
+            stream.Seek(0, SeekOrigin.Begin);
         }
     }
 }

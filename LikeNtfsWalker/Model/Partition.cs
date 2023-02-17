@@ -1,5 +1,6 @@
 ﻿using Filesystem.Ntfs;
 using LikeNtfsWalker.UI;
+using System.Windows.Media.Animation;
 using Util.IO;
 
 namespace LikeNtfsWalker.Model
@@ -31,23 +32,62 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        private PartialStream partialStream;
+        private string filePath;
 
-        public PartialStream PartialStream
+        public string FilePath
         {
-            get => partialStream;
+            get => filePath;
             set
             {
-                partialStream = value;
+                filePath = value;
                 RaisePropertyChanged();
             }
         }
 
-        public Partition(string name, string fileSystem, PartialStream partialStream)
+        private long partitionStartOffset;
+
+        public long PartitionStartOffsets
+        {
+            get => partitionStartOffset;
+            set
+            {
+                partitionStartOffset = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private long partitionEndOffset;
+
+        public long PartitionEndOffset
+        {
+            get => partitionEndOffset;
+            set
+            {
+                partitionEndOffset = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int bytePerSector;
+
+        public int BytePerSector
+        {
+            get => bytePerSector;
+            set
+            {
+                bytePerSector = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Partition(string name, string fileSystem, string filePath , long partitionStartOffset, long partitionEndOffset, int bytePerSector)
         {
             this.name = name;
             this.fileSystem = fileSystem;
-            this.partialStream = partialStream;
+            this.filePath = filePath;
+            this.partitionStartOffset = partitionStartOffset;
+            this.partitionEndOffset = partitionEndOffset;
+            this.bytePerSector = bytePerSector;
         }
     }
 }

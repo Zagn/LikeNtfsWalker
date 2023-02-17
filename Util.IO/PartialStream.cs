@@ -33,7 +33,7 @@ namespace Util.IO
             length = 0;
 
             Extents.Add(extent);
-            length += extent.Size;
+            length = extent.Size;
         }
 
         public override int Read(byte[] buffer, int offset, int count)

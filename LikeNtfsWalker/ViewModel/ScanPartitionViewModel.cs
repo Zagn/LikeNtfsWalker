@@ -31,18 +31,25 @@ namespace LikeNtfsWalker.ViewModel
             try
             {
                 var mbr = new Mbr(disk.FilePath);
-
+                
                 var stream = new DeviceStream(disk.FilePath, 512);
 
-                var partialStream = new PartialStream(stream); //이거 변경해야함
+                var partialStream = new PartialStream(stream);
 
                 foreach (var partition in mbr.partitions)
                 {
                     Extent extent = new Extent((long)partition.StartingLBAAddr * 512, (long)partition.SizeInSector * 512);
-                       
+                    partialStream.ResetExtent(extent);
 
-                    Partitions.Add(new Model.Partition(VolumeLable.FromNtfs(partialStream), GetPartitionType(partition.PartitionType), partialStream));
+                    VBR vbr = new VBR(partialStream);
 
+                    Partitions.Add(new Model.Partition(
+                            VolumeLable.FromNtfs(partialStream)
+                            , GetPartitionType(partition.PartitionType)
+                            , disk.FilePath
+                            , (long)partition.StartingLBAAddr * vbr.BytesPerSector
+                            , (long)partition.SizeInSector * vbr.BytesPerSector
+                            , vbr.BytesPerSector));
                 }
             }
             catch

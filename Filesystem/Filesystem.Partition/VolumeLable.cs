@@ -14,6 +14,7 @@ namespace Filesystem.Partition
     {
         public static string FromNtfs(Stream stream) //partition stream //VBR start location
         {
+            stream.Position = 0;
             const int volumeEntryOffset = 512 * 3 * 2;
             ushort bytePerSector;
             ushort sectorPerCluster;
@@ -37,9 +38,6 @@ namespace Filesystem.Partition
             firstAttrOffset = stream.ReadUInt16(); //Read First Offset 
             
             stream.Seek(mftStartOffset + volumeEntryOffset + firstAttrOffset, SeekOrigin.Begin);
-            
-            //MftStartOffset = ((ulong)ClusterSize * LogicalClusterNumberForTheFileMFT);
-            //MftEntry mftEntry = new MftEntry(stream, vbr.ClusterSize);
 
             var attrStartPos = stream.Position;
 
