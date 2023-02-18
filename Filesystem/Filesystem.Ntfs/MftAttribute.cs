@@ -30,7 +30,7 @@ namespace Filesystem.Ntfs
         LoggedUtilityStream = 0xF0
     }
 
-    internal class MftAttribute
+    public class MftAttribute
     {
         public MftAttHeader Header { get; }
         public AttType Type => Header.Type;
@@ -41,7 +41,7 @@ namespace Filesystem.Ntfs
         }
     }
 
-    internal class MftAttHeader
+    public class MftAttHeader
     {
         public AttType Type { get; }
 
@@ -156,7 +156,7 @@ namespace Filesystem.Ntfs
         }
     }
 
-    internal class ClusterRun
+    public class ClusterRun
     {
         public ulong RunLength { get; }
         public long RunOffset { get; }
@@ -168,7 +168,7 @@ namespace Filesystem.Ntfs
         }
 
     }
-    internal class StandardInformation : MftAttribute
+    public class StandardInformation : MftAttribute
     {
         public ulong CreationTime { get; }
         public ulong ModifiedTime { get; }
@@ -205,8 +205,9 @@ namespace Filesystem.Ntfs
 
         }
     }
+    
 
-    internal class FileName : MftAttribute
+    public class FileName : MftAttribute
     {
         public ulong FileReferenceOfParentDirectory { get; }
         public ulong CreationTime { get; }
@@ -259,7 +260,7 @@ namespace Filesystem.Ntfs
     }
 
 
-    internal class Bitmap : MftAttribute
+    public class Bitmap : MftAttribute
     {
         public byte[] BitFiled { get; }
 
@@ -275,7 +276,7 @@ namespace Filesystem.Ntfs
         }
     }
 
-    internal class VolumeName : MftAttribute
+    public class VolumeName : MftAttribute
     {
         public byte[] UnicodeName { get; }
 
@@ -291,7 +292,7 @@ namespace Filesystem.Ntfs
         }
     }
 
-    internal class DataAttribute : MftAttribute
+    public class DataAttribute : MftAttribute
     {
         public byte[] Data { get; }
 

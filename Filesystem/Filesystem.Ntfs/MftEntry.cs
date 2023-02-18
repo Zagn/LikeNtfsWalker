@@ -4,7 +4,7 @@ using Util.IO;
 
 namespace Filesystem.Ntfs
 {
-    internal class MftEntry
+    public class MftEntry
     {
         public MFTEntryHeader Header { get; }
         public List<MftAttribute> Attributes = new List<MftAttribute>();

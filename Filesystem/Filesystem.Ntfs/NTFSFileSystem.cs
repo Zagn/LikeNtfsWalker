@@ -9,7 +9,7 @@ namespace Filesystem.Ntfs
         public VBR vbr;
         public MFTEntryHeader mfth;
 
-        internal List<MftEntry> MftEntries;
+        public List<MftEntry> MftEntries;
 
         public NTFSFileSystem(Stream stream)
         {
@@ -40,5 +40,7 @@ namespace Filesystem.Ntfs
         {
             Stream.Close();
         }
+
+        
     }
 }

@@ -27,6 +27,15 @@ namespace Util.IO
             length += extent.Size;
         }
 
+        public void ResetExtent(Extent extent)
+        {
+            Extents.Clear();
+            length = 0;
+
+            Extents.Add(extent);
+            length = extent.Size;
+        }
+
         public override int Read(byte[] buffer, int offset, int count)
         {
             int totalSize = 0;
@@ -89,6 +98,13 @@ namespace Util.IO
                 Position = Length + offset;
             }
             return Position;
+        }
+
+        public long GetRealPosition()
+        {
+            var (_, realPos) = getCurrentExtent2(Position);
+
+            return realPos;
         }
 
         #region Not implement
