@@ -108,20 +108,18 @@ namespace Util.IO
             var BufBytes = new byte[sectorToRead * SECTOR_SIZE];
 
             _fs.Seek(positionToRead, SeekOrigin.Begin);
-            _fs.Read(BufBytes, 0, BufBytes.Length);
+            BytesRead += _fs.Read(BufBytes, 0, BufBytes.Length);
 
             Buffer.BlockCopy(BufBytes, restOfPosition, buffer, 0, count);
 
             Position += count;
 
-            return BytesRead;
+            return Math.Min(BytesRead, count);
         }
         public override int ReadByte()
         {
             var buffer = new byte[1];
             Read(buffer, 0, buffer.Length);
-
-            //Position += 1;
 
             return buffer[0];
         }

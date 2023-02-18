@@ -27,6 +27,15 @@ namespace Util.IO
             length += extent.Size;
         }
 
+        public void ResetExtent(Extent extent)
+        {
+            Extents.Clear();
+            length = 0;
+
+            Extents.Add(extent);
+            length = extent.Size;
+        }
+
         public override int Read(byte[] buffer, int offset, int count)
         {
             int totalSize = 0;
@@ -37,6 +46,8 @@ namespace Util.IO
             {
                 var remainSize = count - totalSize;
                 var canReadSize = (int)(Extents[i].Start + Extents[i].Size - realPos);
+                if(canReadSize<0)
+                    canReadSize= 2147483647;
                 var toReadSize = Math.Min(remainSize, canReadSize);
 
                 stream.Seek(realPos, SeekOrigin.Begin);

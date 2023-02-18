@@ -86,6 +86,10 @@ namespace LikeNtfsWalker.ViewModel
                     {
                         if (scanPartitionVM.SelectedPartition == null)
                             MessageBox.Show("스캔할 파티션을 선택해주세요");
+                        else if (scanPartitionVM.SelectedPartition.FileSystem != "NTFS")
+                        {
+                            MessageBox.Show("NTFS 분석만을 지원하고 있습니다");
+                        }
                         else
                         {
                             views.Push(CurrentView);
