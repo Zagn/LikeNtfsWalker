@@ -12,6 +12,7 @@ using System.Windows.Forms.Design;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 
 namespace LikeNtfsWalker.ViewModel
@@ -101,6 +102,7 @@ namespace LikeNtfsWalker.ViewModel
                             break;
                         case AttType.Data:
                             fileInfoList.Add(DataInfo(mftAttr));
+                            HexData = mftEntry.DataStream.ReadBytes((uint)mftEntry.DataStream.Length);
                             break;
                         case AttType.Bitmap:
                             fileInfoList.Add(BitmapInfo(mftAttr));                                
@@ -114,9 +116,6 @@ namespace LikeNtfsWalker.ViewModel
                 }
                 recordslist.Add(new MftRecord(mftNumber, name, size, dataCreated, dataModified, attribute, fileInfoList));
             }
-
-            //hexData = new byte[] { 1, 2, 3, 4, 5 };
-            
         }
         public FileInfo BaseInfo(MftEntry mftEntry)
         {
@@ -129,7 +128,7 @@ namespace LikeNtfsWalker.ViewModel
                 { "Log File Sequence Number", Convert.ToString(mftEntry.Header.LogFileSequenceNumber) }
             };
 
-            return new FileInfo("-Base information-", baseDictionary);
+            return new FileInfo("<Base information>", baseDictionary);
         }
 
         public FileInfo SatandardInfo(MftAttribute mftAttr)
@@ -138,10 +137,10 @@ namespace LikeNtfsWalker.ViewModel
 
             var siaDictionary = new Dictionary<string, string>
             {
-                {"CreationTime", Convert.ToString(sia.CreationTime)},
-                {"ModifiedTime", Convert.ToString(sia.ModifiedTime)},
-                {"MFTModifiedTime", Convert.ToString(sia.MFTModifiedTime)},
-                {"LastAccessedTime", Convert.ToString(sia.LastAccessedTime)},
+                {"CreationTime", Convert.ToString(DateTime.FromFileTime((long)sia.CreationTime))},
+                {"ModifiedTime", Convert.ToString(DateTime.FromFileTime((long)sia.ModifiedTime))},
+                {"MFTModifiedTime", Convert.ToString(DateTime.FromFileTime((long) sia.MFTModifiedTime))},
+                {"LastAccessedTime", Convert.ToString(DateTime.FromFileTime((long) sia.LastAccessedTime))},
                 {"Flags", Convert.ToString(sia.Flags)},
                 {"MaximumNumberOfVersions", Convert.ToString(sia.MaximumNumberOfVersions)},
                 {"ClassID", Convert.ToString(sia.ClassID)},
@@ -149,7 +148,7 @@ namespace LikeNtfsWalker.ViewModel
                 {"UpdateSequenceNumber", Convert.ToString(sia.UpdateSequenceNumber)}
             };
             
-            return new FileInfo("-Attribute : Standart Information (0x10)-", siaDictionary);
+            return new FileInfo("<Attribute : Standart Information (0x10)>", siaDictionary);
         }
 
         public FileInfo FileNameInfo(MftAttribute mftAttr)
@@ -164,10 +163,10 @@ namespace LikeNtfsWalker.ViewModel
             var fileNameDictionary = new Dictionary<string, string>
             {
                 {"FileReferenceOfParentDirectory", Convert.ToString(fileName.FileReferenceOfParentDirectory)},
-                {"CreationTime ", Convert.ToString(fileName.CreationTime)},
-                {"ModifiedTime ", Convert.ToString(fileName.ModifiedTime)},
-                {"MFTModifiedTime ", Convert.ToString(fileName.MFTModifiedTime)},
-                {"LastAccessedTime ", Convert.ToString(fileName.LastAccessedTime)},
+                {"CreationTime ", Convert.ToString(DateTime.FromFileTime((long)fileName.CreationTime))},
+                {"ModifiedTime ", Convert.ToString(DateTime.FromFileTime((long)fileName.ModifiedTime))},
+                {"MFTModifiedTime ", Convert.ToString(DateTime.FromFileTime((long) fileName.MFTModifiedTime))},
+                {"LastAccessedTime ", Convert.ToString(DateTime.FromFileTime((long) fileName.LastAccessedTime))},
                 {"AllocatedSizeOfFile", Convert.ToString(fileName.AllocatedSizeOfFile)},
                 {"RealSizeOfFile", Convert.ToString(fileName.RealSizeOfFile)},
                 {"Flags ", Convert.ToString(fileName.Flags)},
@@ -176,7 +175,7 @@ namespace LikeNtfsWalker.ViewModel
                 {"Name", Convert.ToString(fileName.Name).Replace("\0", "")}
             };
            
-            return new FileInfo("-Attribute : File Name (0x30)-", fileNameDictionary);
+            return new FileInfo("<Attribute : File Name (0x30)>", fileNameDictionary);
         }
 
         public FileInfo DataInfo(MftAttribute mftAttr)
@@ -186,7 +185,6 @@ namespace LikeNtfsWalker.ViewModel
             var dataDictionary = new Dictionary<string, string>()
             {
                 {"Type ", Convert.ToString(dataAttribute.Type)}
-                //dataDictionary.Add("Data Length", Convert.ToString(dataAttribute.Data.)); 
             };
             
             //long count = 0; //Data Null 나옴
@@ -196,7 +194,9 @@ namespace LikeNtfsWalker.ViewModel
             //    HexData[count++] = i;
             //}
 
-            return new FileInfo("-Attribute : Data (0x80)-", dataDictionary);
+
+
+            return new FileInfo("<Attribute : Data (0x80)>", dataDictionary);
         }
 
         public FileInfo BitmapInfo(MftAttribute mftAttr)
@@ -209,7 +209,7 @@ namespace LikeNtfsWalker.ViewModel
                 {"BitFiled", Convert.ToString(bitmap.BitFiled)}
             };
 
-            return new FileInfo("-Attribute : Bitmap (0xB0)-", bitmapDictionary);
+            return new FileInfo("<Attribute : Bitmap (0xB0)>", bitmapDictionary);
         }
 
 
@@ -222,7 +222,7 @@ namespace LikeNtfsWalker.ViewModel
                 {"UnicodeName", Convert.ToString(volumeName.UnicodeName)}
             };
             
-            return new FileInfo("-Attribute : Volume (0x60)-", volumeDictionary);
+            return new FileInfo("<Attribute : Volume (0x60)>", volumeDictionary);
         }
 
         public void Savefile(object parameter)
