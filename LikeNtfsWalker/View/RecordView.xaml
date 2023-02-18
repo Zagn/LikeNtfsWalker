@@ -46,10 +46,6 @@
                         </ListView>
                     </Grid>
                 </TabItem>
-                <TabItem Header="TabItem">
-                    <Grid Background="#FFE5E5E5">
-                    </Grid>
-                </TabItem>
             </TabControl>
 
             <TabControl  Grid.Column="2">

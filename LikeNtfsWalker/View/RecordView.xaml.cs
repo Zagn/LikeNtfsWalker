@@ -14,8 +14,6 @@ namespace LikeNtfsWalker.View
         {
             InitializeComponent();
             DataContext = new RecordViewModel(scan);
-
-            HexViewer.SetBytes(new byte[] { 1, 2, 3, 4, 5 });
         }
     }
 }

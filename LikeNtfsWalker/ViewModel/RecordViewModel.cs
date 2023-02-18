@@ -2,6 +2,7 @@
 using LikeNtfsWalker.UI;
 using System.Collections.ObjectModel;
 using System.Windows.Markup;
+using System.Xml.Linq;
 
 namespace LikeNtfsWalker.ViewModel
 {
@@ -61,8 +62,5 @@ namespace LikeNtfsWalker.ViewModel
 
             dialog.ShowDialog();
         }
-
-            
-
     }
 }
