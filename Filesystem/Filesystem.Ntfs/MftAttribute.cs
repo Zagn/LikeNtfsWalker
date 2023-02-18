@@ -293,8 +293,6 @@ namespace Filesystem.Ntfs
 
     internal class DataAttribute : MftAttribute
     {
-        //public List<ClusterRun> ClusterRuns { get; }
-
         public byte[] Data { get; }
 
         public DataAttribute(MftAttHeader header, Stream stream) : base(header)
@@ -302,12 +300,12 @@ namespace Filesystem.Ntfs
             if (header.NonResidentFlag == 1)
                 return;
 
-            // Resident 이면 Data에 값 입력
-            var regidentHeader = (ResidentHeader)header;
-            //Data = stream.ReadBytes(regidentHeader.SizeOfContent);
-
-            Data = new byte[regidentHeader.SizeOfContent];
-            stream.Read(Data, 0, Data.Length);
+            
+                var regidentHeader = (ResidentHeader)header;
+                Data = new byte[regidentHeader.SizeOfContent];
+                stream.Read(Data, 0, Data.Length);
+            
+            
         }
     }
 }

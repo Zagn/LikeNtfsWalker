@@ -9,7 +9,8 @@ namespace Filesystem.Ntfs
         public MFTEntryHeader Header { get; }
         public List<MftAttribute> Attributes = new List<MftAttribute>();
         public Stream DataStream { get; }
-        
+        public byte[] HexData { get; }
+
 
         public MftEntry(Stream stream, int clusterSize)
         {
@@ -40,7 +41,7 @@ namespace Filesystem.Ntfs
                 var isNonResident = stream.ReadBool();
                 var attOffset = stream.Seek(-9, SeekOrigin.Current);
                 var header = isNonResident ? (MftAttHeader)new NonResidentHeader(stream) : new ResidentHeader(stream);
-                var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : stream;
+                var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : residentToExtents((ResidentHeader)header, stream);
 
                 switch (header.Type)
                 {
@@ -64,7 +65,6 @@ namespace Filesystem.Ntfs
                         stream.Seek(attOffset + header.AttLength, SeekOrigin.Begin);
                         break;
                 }
-
                 pos = stream.Seek(pos + header.AttLength, SeekOrigin.Begin);
             }
 
@@ -90,6 +90,18 @@ namespace Filesystem.Ntfs
             
             return dataStream;
             
+        }
+
+        public PartialStream residentToExtents(ResidentHeader header, Stream stream)
+        {
+            var dataStream = new PartialStream(stream);
+
+            var startoffset = stream.Position;
+            var length = header.SizeOfContent ;
+            dataStream.AddExtent(new Extent(startoffset, length));
+
+
+            return dataStream;
         }
     }
 }
