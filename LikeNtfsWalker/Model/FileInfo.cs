@@ -23,13 +23,6 @@ namespace LikeNtfsWalker.Model
         {
             this.title = title; 
             this.Properties = properties;
-
-
-            // test
-            /*datalist.Add("A", "123");
-            datalist.Remove("A");
-            datalist["A"] = "456";
-            datalist["B"] = "789";*/
         }
 
         

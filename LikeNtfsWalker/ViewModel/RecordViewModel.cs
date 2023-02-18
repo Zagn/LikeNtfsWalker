@@ -62,6 +62,7 @@ namespace LikeNtfsWalker.ViewModel
             ntfsFileSystem.BuildFilesystem();
 
             return ntfsFileSystem.MftEntries;
+
         }
 
         private MftRecord MakeMftRecord(MftEntry entry)

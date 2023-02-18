@@ -69,7 +69,6 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        // Atribute
         private string attributes;
 
         public string Attributes

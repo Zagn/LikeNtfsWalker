@@ -7,7 +7,6 @@ namespace LikeNtfsWalker.Model
 {
     public class Partition : Notifier
     {
-        // 파티션 이름
         private string name;
 
         public string Name
