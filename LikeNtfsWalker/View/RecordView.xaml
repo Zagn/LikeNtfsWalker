@@ -61,13 +61,12 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="20"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Text="{Binding Title}" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
-                                        <ListView ItemsSource="{Binding Properties}"  Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                                  BorderThickness="0">
+                                        <TextBlock Text="{Binding Title}" Grid.Row="0"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontWeight="Bold" FontFamily=	"Gungsuh"></TextBlock>
+                                        <ListView ItemsSource="{Binding Properties}"  Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  BorderThickness="1" >
                                             <ListView.Resources>
                                                 <Style TargetType="GridViewColumnHeader">
                                                     <Setter Property="Visibility" Value="Collapsed"/>

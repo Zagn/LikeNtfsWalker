@@ -102,7 +102,7 @@ namespace LikeNtfsWalker.ViewModel
                             break;
                         case AttType.Data:
                             fileInfoList.Add(DataInfo(mftAttr));
-                            HexData = mftEntry.DataStream.ReadBytes((uint)mftEntry.DataStream.Length);
+                            //HexData = mftEntry.DataStream.ReadBytes((uint)mftEntry.DataStream.Length);
                             break;
                         case AttType.Bitmap:
                             fileInfoList.Add(BitmapInfo(mftAttr));                                

@@ -54,7 +54,6 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        // DateModified
         private string modifiedDate;
 
         public string ModifiedDate
@@ -67,7 +66,6 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        // Atribute
         private string attributes;
 
         public string Attributes
