@@ -75,7 +75,7 @@ namespace Filesystem.Ntfs
         }
     }
 
-    internal class ResidentHeader : MftAttHeader
+    public class ResidentHeader : MftAttHeader
     {
         public uint SizeOfContent { get; }
         public ushort OffsetOfContent { get; }
@@ -251,7 +251,7 @@ namespace Filesystem.Ntfs
 
             Namespace = stream.ReadUInt16(1);
                    
-            Name = stream.ReadString(RealLengthOfName);
+            Name = stream.ReadString(RealLengthOfName, Encoding.Unicode);
 
             var pos = stream.Position;
             var FileNamePadding = s - pos;
@@ -294,21 +294,11 @@ namespace Filesystem.Ntfs
 
     public class DataAttribute : MftAttribute
     {
-        //public List<ClusterRun> ClusterRuns { get; }
-
-        public byte[] Data { get; }
+        public Stream DataStream { get; }
 
         public DataAttribute(MftAttHeader header, Stream stream) : base(header)
         {
-            if (header.NonResidentFlag == 1)
-                return;
-
-            // Resident 이면 Data에 값 입력
-            var regidentHeader = (ResidentHeader)header;
-            //Data = stream.ReadBytes(regidentHeader.SizeOfContent);
-
-            Data = new byte[regidentHeader.SizeOfContent];
-            stream.Read(Data, 0, Data.Length);
+            DataStream = stream;
         }
     }
 }
