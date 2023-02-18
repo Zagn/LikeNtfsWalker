@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:LikeNtfsWalker"
              StartupUri="View/MainView.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>
