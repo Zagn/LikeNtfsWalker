@@ -32,7 +32,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
-                    <ListView  ItemsSource="{Binding DiskList}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectedDisk}">
+                    <ListView  ItemsSource="{Binding DiskList}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectedDisk}"> 
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Drive Name" Width="200" DisplayMemberBinding="{Binding DriveName}"/>

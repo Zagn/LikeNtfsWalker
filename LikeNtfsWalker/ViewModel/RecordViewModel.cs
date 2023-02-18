@@ -114,9 +114,6 @@ namespace LikeNtfsWalker.ViewModel
                 }
                 recordslist.Add(new MftRecord(mftNumber, name, size, dataCreated, dataModified, attribute, fileInfoList));
             }
-
-            //hexData = new byte[] { 1, 2, 3, 4, 5 };
-            
         }
         public FileInfo BaseInfo(MftEntry mftEntry)
         {
