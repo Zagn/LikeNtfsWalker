@@ -65,8 +65,6 @@ namespace Filesystem.Partition
                     partitions.Add(partition);
                 }
             }
-
-            stream.Close();
         }
     }
 }

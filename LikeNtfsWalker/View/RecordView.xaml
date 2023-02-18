@@ -32,7 +32,7 @@
             <TabControl Grid.Column="0">
                 <TabItem Header="MFT Records">
                     <Grid Background="#FFE5E5E5">
-                        <ListView ItemsSource="{Binding RecordList}" SelectedItem="{Binding SelectedRecord}">
+                        <ListView ItemsSource="{Binding RecordList}" SelectedItem="{Binding SelectedRecord}" SelectionChanged="ListView_SelectionChanged">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="MFT #" Width="50" DisplayMemberBinding="{Binding MftNumber}"/>

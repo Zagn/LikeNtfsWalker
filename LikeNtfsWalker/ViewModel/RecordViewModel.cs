@@ -35,18 +35,6 @@ namespace LikeNtfsWalker.ViewModel
             }
         }
 
-        private byte[] hexData;
-
-        public byte[] HexData
-        {
-            get => hexData;
-            set
-            {
-                hexData = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public Command SaveCommand { get; set; }
 
         public RecordViewModel(Partition partition)
@@ -104,7 +92,6 @@ namespace LikeNtfsWalker.ViewModel
 
                     case AttType.Data:
                         fileInfoList.Add(MakeFileInfo((DataAttribute)mftAttr));
-                        //HexData = entry.DataStream.ReadBytes((uint)entry.DataStream.Length);
                         break;
 
                     case AttType.Bitmap:
@@ -120,7 +107,7 @@ namespace LikeNtfsWalker.ViewModel
                 }
             }
 
-            return new MftRecord(entry.Header.NumberOfThisMFTEntry, name, size, dataCreated, dataModified, attribute, fileInfoList);
+            return new MftRecord(entry.Header.NumberOfThisMFTEntry, name, size, dataCreated, dataModified, attribute, fileInfoList, entry.DataStream);
         }
 
         public FileInfo MakeFileInfo(MFTEntryHeader header)

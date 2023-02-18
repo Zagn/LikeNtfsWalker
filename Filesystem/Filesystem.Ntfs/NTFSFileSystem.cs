@@ -39,7 +39,6 @@ namespace Filesystem.Ntfs
 
         ~NTFSFileSystem()
         {
-            Stream.Close();
         }
 
         

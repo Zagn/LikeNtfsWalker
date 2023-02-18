@@ -94,9 +94,18 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        public Stream DataStream { get; set; }
+        private Stream dataStream;
+        public Stream DataStream 
+        {
+            get => dataStream;
+            set
+            {
+                dataStream = value;
+                RaisePropertyChanged();
+            } 
+        }
 
-        public MftRecord(uint mftNumber, string fileName, string size, DateTime? created, DateTime? modified, string attributes, List<FileInfo> fileInfoList)
+        public MftRecord(uint mftNumber, string fileName, string size, DateTime? created, DateTime? modified, string attributes, List<FileInfo> fileInfoList, Stream dataStream)
         {
             this.mftNumber = mftNumber;
             this.fileName = fileName;
@@ -105,6 +114,7 @@ namespace LikeNtfsWalker.Model
             modifiedDate = modified;
             this.attributes = attributes;
             this.fileInfoList = fileInfoList;
+            this.dataStream = dataStream;
         }
     }
 }
