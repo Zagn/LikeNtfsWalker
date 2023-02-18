@@ -13,7 +13,7 @@ namespace Filesystem.Ntfs
     {
         public static void Main(string[] argv)
         {
-            var path = "C://test.vhd";
+            var path = "C://testtest.vhd";
             var padding = 0x10000;
             var baseStream = File.OpenRead(path);
             var stream = new PartialStream(baseStream);

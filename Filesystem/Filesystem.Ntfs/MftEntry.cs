@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Util.IO;
 
 namespace Filesystem.Ntfs
@@ -41,7 +43,7 @@ namespace Filesystem.Ntfs
                 var isNonResident = stream.ReadBool();
                 var attOffset = stream.Seek(-9, SeekOrigin.Current);
                 var header = isNonResident ? (MftAttHeader)new NonResidentHeader(stream) : new ResidentHeader(stream);
-                var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize) : residentToExtents((ResidentHeader)header, stream);
+                var attDataStream = isNonResident ? clusterRunToExtents(((NonResidentHeader)header).ClusterRuns, stream, clusterSize,(long)((NonResidentHeader)header).ContentActureSize) : residentToExtents((ResidentHeader)header, stream);
 
                 switch (header.Type)
                 {
@@ -74,20 +76,23 @@ namespace Filesystem.Ntfs
         
         
 
-        public PartialStream clusterRunToExtents(List<ClusterRun> clusterRun, Stream stream, int clusterSize)
+        public PartialStream clusterRunToExtents(List<ClusterRun> clusterRun, Stream stream, int clusterSize, long ContentActureSize)
         {
             var dataStream = new PartialStream(stream);
+            var remainSize = ContentActureSize;
             var padding = 0L;
 
             foreach (var cluster in clusterRun)
             {
                 var startOffset = cluster.RunOffset * clusterSize;
-                var length = (long)cluster.RunLength * clusterSize;
+                var length = Math.Min((long)cluster.RunLength * clusterSize, remainSize);
+                
                 dataStream.AddExtent(new Extent(startOffset + padding, length));
 
                 padding = startOffset;
+                remainSize -= length;
             }
-            
+
             return dataStream;
             
         }
@@ -100,8 +105,14 @@ namespace Filesystem.Ntfs
             var length = header.SizeOfContent ;
             dataStream.AddExtent(new Extent(startoffset, length));
 
-
             return dataStream;
+        }
+
+        public override string ToString()
+        {
+            var fileName = Attributes.Find(att => att.Type == AttType.FileName);
+
+            return (fileName as FileName)?.Name ?? "";
         }
     }
 }

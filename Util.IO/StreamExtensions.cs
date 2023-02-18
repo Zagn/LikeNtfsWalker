@@ -60,13 +60,19 @@ namespace Util.IO
 
         public static string ReadString(this Stream stream, int length)
         {
+            return stream.ReadString(length, Encoding.UTF8);
+        }
+
+        public static string ReadString(this Stream stream, int length, Encoding encoding)
+        {
             byte[] buffer = new byte[length];
             stream.Read(buffer, 0, length);
-            
 
-            return Encoding.UTF8.GetString(buffer);
+
+            return encoding.GetString(buffer);
         }
-        public static byte[] ReadBytes(this Stream stream, uint length)
+
+        public static byte[] ReadBytes(this Stream stream, int length)
         {
             byte[] buffer = new byte[length];
             stream.Read(buffer, 0, (int)length);
