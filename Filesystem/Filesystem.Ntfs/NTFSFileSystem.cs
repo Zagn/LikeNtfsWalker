@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Util.IO;
 
 namespace Filesystem.Ntfs
 {
@@ -23,16 +24,16 @@ namespace Filesystem.Ntfs
             Stream.Seek((long)vbr.MftStartOffset, SeekOrigin.Begin);
 
             var mft = new MftEntry(Stream, vbr.ClusterSize); // $MFT
-            var padding = 0L;
+            var mftStream = mft.DataStream as PartialStream;
+            if (mftStream == null)
+                return;
 
-            while (mft.DataStream.Position < mft.DataStream.Length) //mft.DataStram is null
+            while (mftStream.Position < mftStream.Length) //mft.DataStram is null
             {
+                Stream.Seek(mftStream.GetRealPosition(), SeekOrigin.Begin);
+                MftEntries.Add(new MftEntry(Stream, vbr.ClusterSize));
 
-                MftEntries.Add(new MftEntry(mft.DataStream, vbr.ClusterSize));
-               
-                if (mft.DataStream.Position % 4 != 0)
-                    padding = 4 - mft.DataStream.Position % 4;
-                mft.DataStream.Seek(padding, SeekOrigin.Current);
+                mftStream.Seek(0x400, SeekOrigin.Current);
             }
         }
 
