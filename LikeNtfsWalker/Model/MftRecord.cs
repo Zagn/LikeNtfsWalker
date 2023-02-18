@@ -1,4 +1,6 @@
 ﻿using LikeNtfsWalker.UI;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -6,9 +8,9 @@ namespace LikeNtfsWalker.Model
 {
     public class MftRecord : Notifier
     {
-        private string mftNumber;
+        private uint mftNumber;
 
-        public string MftNumber
+        public uint MftNumber
         {
             get => mftNumber;
             set
@@ -42,9 +44,9 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        private string createDate;
+        private DateTime? createDate;
 
-        public string CreateDate
+        public DateTime? CreateDate
         {
             get => createDate;
             set
@@ -55,9 +57,9 @@ namespace LikeNtfsWalker.Model
         }
 
         // DateModified
-        private string modifiedDate;
+        private DateTime? modifiedDate;
 
-        public string ModifiedDate
+        public DateTime? ModifiedDate
         {
             get => modifiedDate;
             set
@@ -80,9 +82,9 @@ namespace LikeNtfsWalker.Model
             }
         }
 
-        private ObservableCollection<FileInfo> fileInfoList;
+        private List<FileInfo> fileInfoList;
 
-        public ObservableCollection<FileInfo> FileInfoList
+        public List<FileInfo> FileInfoList
         {
             get => fileInfoList;
             set
@@ -94,13 +96,13 @@ namespace LikeNtfsWalker.Model
 
         public Stream DataStream { get; set; }
 
-        public MftRecord(string mftNumber, string fileName, string size, string created, string modified, string attributes, ObservableCollection<FileInfo> fileInfoList)
+        public MftRecord(uint mftNumber, string fileName, string size, DateTime? created, DateTime? modified, string attributes, List<FileInfo> fileInfoList)
         {
             this.mftNumber = mftNumber;
             this.fileName = fileName;
             this.size= size;
-            this.createDate = created;
-            this.modifiedDate = modified;
+            createDate = created;
+            modifiedDate = modified;
             this.attributes = attributes;
             this.fileInfoList = fileInfoList;
         }

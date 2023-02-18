@@ -1,32 +1,16 @@
 ﻿using Filesystem.Ntfs;
 using LikeNtfsWalker.Model;
 using LikeNtfsWalker.UI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Markup;
 using Util.IO;
-using System;
-using System.Reflection;
-using System.Xml.Linq;
-using System.Windows.Forms.Design;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 
 
 namespace LikeNtfsWalker.ViewModel
 {
     public class RecordViewModel : Notifier
     {
-        string mftNumber = string.Empty;
-        string name = string.Empty;
-        string size = string.Empty;
-        string dataCreated = string.Empty;
-        string dataModified = string.Empty;
-        string attribute = string.Empty;
-        long mftCount = 0;
-
         private ObservableCollection<MftRecord> recordslist;
 
         public ObservableCollection<MftRecord> RecordList
@@ -67,74 +51,94 @@ namespace LikeNtfsWalker.ViewModel
 
         public RecordViewModel(Partition partition)
         {
+            init();
+
+            var entries = buildNtfs(partition);
+            foreach (var mftEntry in entries)
+                recordslist.Add(MakeMftRecord(mftEntry));
+        }
+
+        private void init()
+        {
             recordslist = new ObservableCollection<MftRecord>();
             SaveCommand = new Command(Savefile);
-            
-            
+        }
+
+        private List<MftEntry> buildNtfs(Partition partition)
+        {
             var stream = new DeviceStream(partition.FilePath, partition.BytePerSector);
             var partialStream = new PartialStream(stream);
-
-            Extent extent = new Extent(partition.PartitionStartOffsets, partition.PartitionEndOffset);
-            
-            partialStream.AddExtent(extent);
+            partialStream.AddExtent(new Extent(partition.PartitionStartOffsets, partition.PartitionEndOffset));
             var ntfsFileSystem = new NTFSFileSystem(partialStream);
 
             ntfsFileSystem.BuildFilesystem();
 
-            foreach (var mftEntry in ntfsFileSystem.MftEntries)
-            {
-                mftNumber = Convert.ToString(mftCount++);
-
-                var fileInfoList = new ObservableCollection<FileInfo>
-                {
-                    BaseInfo(mftEntry)
-                };
-
-                foreach (var mftAttr in mftEntry.Attributes)
-                {
-                    switch (mftAttr.Type)
-                    {
-                        case AttType.SIA:  
-                            fileInfoList.Add(SatandardInfo(mftAttr));
-                            break;
-                        case AttType.FileName:
-                            fileInfoList.Add(FileNameInfo(mftAttr));
-                            break;
-                        case AttType.Data:
-                            fileInfoList.Add(DataInfo(mftAttr));
-                            HexData = mftEntry.DataStream.ReadBytes((uint)mftEntry.DataStream.Length);
-                            break;
-                        case AttType.Bitmap:
-                            fileInfoList.Add(BitmapInfo(mftAttr));                                
-                            break;
-                        case AttType.VolumeName:
-                            fileInfoList.Add(VolumeInfo(mftAttr));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                recordslist.Add(new MftRecord(mftNumber, name, size, dataCreated, dataModified, attribute, fileInfoList));
-            }
+            return ntfsFileSystem.MftEntries;
         }
-        public FileInfo BaseInfo(MftEntry mftEntry)
+
+        private MftRecord MakeMftRecord(MftEntry entry)
+        {
+            var name = string.Empty;
+            var size = string.Empty;
+            DateTime? dataCreated = null;
+            DateTime? dataModified = null;
+            var attribute = string.Empty;
+            var fileInfoList = new List<FileInfo>() { MakeFileInfo(entry.Header) };
+
+            foreach (var mftAttr in entry.Attributes)
+            {
+                switch (mftAttr.Type)
+                {
+                    case AttType.SIA:
+                        fileInfoList.Add(MakeFileInfo((StandardInformation)mftAttr));
+                        break;
+
+                    case AttType.FileName:
+                        var fileName = (FileName)mftAttr; ;
+                        name = fileName.Name.Replace("\0", "");
+                        size = Convert.ToString(fileName.RealSizeOfFile / 1024) + "KB";
+                        dataCreated = DateTime.FromFileTime((long)fileName.CreationTime);
+                        dataModified = DateTime.FromFileTime((long)fileName.ModifiedTime);
+                        fileInfoList.Add(MakeFileInfo(fileName));
+                        break;
+
+                    case AttType.Data:
+                        fileInfoList.Add(MakeFileInfo((DataAttribute)mftAttr));
+                        //HexData = entry.DataStream.ReadBytes((uint)entry.DataStream.Length);
+                        break;
+
+                    case AttType.Bitmap:
+                        fileInfoList.Add(MakeFileInfo((Bitmap)mftAttr));
+                        break;
+
+                    case AttType.VolumeName:
+                        fileInfoList.Add(MakeFileInfo((VolumeName)mftAttr));
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return new MftRecord(entry.Header.NumberOfThisMFTEntry, name, size, dataCreated, dataModified, attribute, fileInfoList);
+        }
+
+        public FileInfo MakeFileInfo(MFTEntryHeader header)
         {
             var baseDictionary = new Dictionary<string, string>
             {
-                { "Sequence Number", Convert.ToString(mftEntry.Header.SequenceNumber) },
-                { "LinkCount", Convert.ToString(mftEntry.Header.LinkCount) },
-                { "Record Size", Convert.ToString(mftEntry.Header.UsedSizeofMFTEntry) },
-                { "Record Allocated Size", Convert.ToString(mftEntry.Header.AllocatedSizeOfMFTEntry) },
-                { "Log File Sequence Number", Convert.ToString(mftEntry.Header.LogFileSequenceNumber) }
+                { "Sequence Number", Convert.ToString(header.SequenceNumber) },
+                { "LinkCount", Convert.ToString(header.LinkCount) },
+                { "Record Size", Convert.ToString(header.UsedSizeofMFTEntry) },
+                { "Record Allocated Size", Convert.ToString(header.AllocatedSizeOfMFTEntry) },
+                { "Log File Sequence Number", Convert.ToString(header.LogFileSequenceNumber) }
             };
 
             return new FileInfo("<Base information>", baseDictionary);
         }
 
-        public FileInfo SatandardInfo(MftAttribute mftAttr)
+        public FileInfo MakeFileInfo(StandardInformation sia)
         {
-            StandardInformation sia = (StandardInformation)mftAttr;
-
             var siaDictionary = new Dictionary<string, string>
             {
                 {"CreationTime", Convert.ToString(DateTime.FromFileTime((long)sia.CreationTime))},
@@ -151,15 +155,8 @@ namespace LikeNtfsWalker.ViewModel
             return new FileInfo("<Attribute : Standart Information (0x10)>", siaDictionary);
         }
 
-        public FileInfo FileNameInfo(MftAttribute mftAttr)
+        public FileInfo MakeFileInfo(FileName fileName)
         {
-            FileName fileName = (FileName)mftAttr;
-
-            name = fileName.Name.Replace("\0", "");
-            size = Convert.ToString(fileName.RealSizeOfFile / 1024) + "KB";
-            dataCreated = Convert.ToString(fileName.CreationTime);
-            dataModified = Convert.ToString(fileName.ModifiedTime);
-
             var fileNameDictionary = new Dictionary<string, string>
             {
                 {"FileReferenceOfParentDirectory", Convert.ToString(fileName.FileReferenceOfParentDirectory)},
@@ -178,31 +175,18 @@ namespace LikeNtfsWalker.ViewModel
             return new FileInfo("<Attribute : File Name (0x30)>", fileNameDictionary);
         }
 
-        public FileInfo DataInfo(MftAttribute mftAttr)
+        public FileInfo MakeFileInfo(DataAttribute dataAttribute)
         {
-            DataAttribute dataAttribute = (DataAttribute)mftAttr;
-
             var dataDictionary = new Dictionary<string, string>()
             {
                 {"Type ", Convert.ToString(dataAttribute.Type)}
             };
             
-            //long count = 0; //Data Null 나옴
-
-            //foreach (var i in dataAttribute.Data)
-            //{
-            //    HexData[count++] = i;
-            //}
-
-
-
             return new FileInfo("<Attribute : Data (0x80)>", dataDictionary);
         }
 
-        public FileInfo BitmapInfo(MftAttribute mftAttr)
+        public FileInfo MakeFileInfo(Bitmap bitmap)
         {
-            Bitmap bitmap = (Bitmap)mftAttr;
-
             var bitmapDictionary = new Dictionary<string, string>()
             {
                 {"Type  ", Convert.ToString(bitmap.Type)},
@@ -213,10 +197,8 @@ namespace LikeNtfsWalker.ViewModel
         }
 
 
-        public FileInfo VolumeInfo(MftAttribute mftAttr)
+        public FileInfo MakeFileInfo(VolumeName volumeName)
         {
-            VolumeName volumeName = (VolumeName)mftAttr;
-
             var volumeDictionary = new Dictionary<string, string>()
             {
                 {"UnicodeName", Convert.ToString(volumeName.UnicodeName)}
