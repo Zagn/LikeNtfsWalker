@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+
 namespace LikeNtfsWalker.ViewModel
 {
     public class RecordViewModel : Notifier

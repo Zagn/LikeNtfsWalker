@@ -100,6 +100,13 @@ namespace Util.IO
             return Position;
         }
 
+        public long GetRealPosition()
+        {
+            var (_, realPos) = getCurrentExtent2(Position);
+
+            return realPos;
+        }
+
         #region Not implement
         public override bool CanRead => throw new NotImplementedException();
 
