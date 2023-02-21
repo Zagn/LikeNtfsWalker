@@ -44,6 +44,7 @@ namespace LikeNtfsWalker.ViewModel
             var entries = buildNtfs(partition);
             foreach (var mftEntry in entries)
                 recordslist.Add(MakeMftRecord(mftEntry));
+
         }
 
         private void init()
@@ -62,7 +63,6 @@ namespace LikeNtfsWalker.ViewModel
             ntfsFileSystem.BuildFilesystem();
 
             return ntfsFileSystem.MftEntries;
-
         }
 
         private MftRecord MakeMftRecord(MftEntry entry)
@@ -199,9 +199,23 @@ namespace LikeNtfsWalker.ViewModel
         {
             var dialog = new System.Windows.Forms.SaveFileDialog();
 
+            dialog.Title = "Save File";
+            dialog.Filter = "Text file|*.txt|JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif|PNG Image|*.png";
             dialog.CheckPathExists = true;
 
             dialog.ShowDialog();
+            if (dialog.FileName != "")
+            {
+                System.IO.FileStream fs = (System.IO.FileStream)dialog.OpenFile();
+
+                fs.Write
+                    (selectedrecord.DataStream.ReadBytes((int)selectedrecord.DataStream.Length)
+                    , 0
+                    , (int)selectedrecord.DataStream.Length);
+
+                fs.Close();
+            }
+
         }
     }
 }
